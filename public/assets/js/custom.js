@@ -4,48 +4,63 @@
     /* page loader */
     function hideLoader() {
         const loader = document.getElementById("loader");
-        loader.classList.add("d-none")
+        loader.classList.add("d-none");
     }
     window.addEventListener("load", hideLoader);
     /* page loader */
 
     /* tooltip */
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipTriggerList = document.querySelectorAll(
+        '[data-bs-toggle="tooltip"]'
+    );
     const tooltipList = [...tooltipTriggerList].map(
         (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
     );
 
     /* popover  */
-    const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
+    const popoverTriggerList = document.querySelectorAll(
+        '[data-bs-toggle="popover"]'
+    );
     const popoverList = [...popoverTriggerList].map(
         (popoverTriggerEl) => new bootstrap.Popover(popoverTriggerEl)
     );
 
     //switcher color pickers
-    const pickrContainerPrimary = document.querySelector(".pickr-container-primary");
-    const themeContainerPrimary = document.querySelector(".theme-container-primary");
-    const pickrContainerBackground = document.querySelector(".pickr-container-background");
-    const themeContainerBackground = document.querySelector(".theme-container-background");
+    const pickrContainerPrimary = document.querySelector(
+        ".pickr-container-primary"
+    );
+    const themeContainerPrimary = document.querySelector(
+        ".theme-container-primary"
+    );
+    const pickrContainerBackground = document.querySelector(
+        ".pickr-container-background"
+    );
+    const themeContainerBackground = document.querySelector(
+        ".theme-container-background"
+    );
 
     /* for theme primary */
-    const nanoThemes = [["nano", {
-        defaultRepresentation: "RGB",
-        components: {
-            preview: true,
-            opacity: false,
-            hue: true,
+    const nanoThemes = [
+        [
+            "nano",
+            {
+                defaultRepresentation: "RGB",
+                components: {
+                    preview: true,
+                    opacity: false,
+                    hue: true,
 
-            interaction: {
-                hex: false,
-                rgba: true,
-                hsva: false,
-                input: true,
-                clear: false,
-                save: false,
+                    interaction: {
+                        hex: false,
+                        rgba: true,
+                        hsva: false,
+                        input: true,
+                        clear: false,
+                        save: false,
+                    },
+                },
             },
-        },
-    },
-    ],
+        ],
     ];
     const nanoButtons = [];
     let nanoPickr = null;
@@ -86,16 +101,16 @@
                 let html = document.querySelector("html");
                 html.style.setProperty(
                     "--primary-rgb",
-                    `${Math.floor(color[0])}, ${Math.floor(color[1])}, ${Math.floor(
-                        color[2]
-                    )}`
+                    `${Math.floor(color[0])}, ${Math.floor(
+                        color[1]
+                    )}, ${Math.floor(color[2])}`
                 );
                 /* theme color picker */
                 localStorage.setItem(
                     "primaryRGB",
-                    `${Math.floor(color[0])}, ${Math.floor(color[1])}, ${Math.floor(
-                        color[2]
-                    )}`
+                    `${Math.floor(color[0])}, ${Math.floor(
+                        color[1]
+                    )}, ${Math.floor(color[2])}`
                 );
                 updateColors();
             });
@@ -186,7 +201,8 @@
                     .querySelector("html")
                     .style.setProperty(
                         "--form-control-bg",
-                        `rgb(${color[0] + 14}, ${color[1] + 14}, ${color[2] + 14})`
+                        `rgb(${color[0] + 14}, ${color[1] + 14}, ${color[2] + 14
+                        })`
                     );
                 localStorage.removeItem("bgtheme");
                 updateColors();
@@ -351,54 +367,45 @@ headerbtn1.forEach((button) => {
 });
 /* for notifications dropdown */
 
-
 const values = [
     {
         value: "1",
-        label:
-            '<img class="avatar avatar-xs avatar-rounded" src="../assets/images/flags/us_flag.jpg" alt=""> <span class="mx-1">United States</span>',
+        label: '<img class="avatar avatar-xs avatar-rounded" src="../assets/images/flags/us_flag.jpg" alt=""> <span class="mx-1">United States</span>',
         id: 1,
     },
     {
         value: "2",
-        label:
-            '<img class="avatar avatar-xs avatar-rounded" src="../assets/images/flags/spain_flag.jpg"  alt=""> <span class="ms-1">Spain</span>',
+        label: '<img class="avatar avatar-xs avatar-rounded" src="../assets/images/flags/spain_flag.jpg"  alt=""> <span class="ms-1">Spain</span>',
         id: 2,
     },
     {
         value: "3",
-        label:
-            '<img class="avatar avatar-xs avatar-rounded" src="../assets/images/flags/french_flag.jpg" alt=""> <span class="ms-1">France</span>',
+        label: '<img class="avatar avatar-xs avatar-rounded" src="../assets/images/flags/french_flag.jpg" alt=""> <span class="ms-1">France</span>',
         id: 3,
     },
     {
         value: "4",
-        label:
-            '<img class="avatar avatar-xs avatar-rounded" src="../assets/images/flags/germany_flag.jpg" alt=""> <span class="ms-1">Germany</span>',
+        label: '<img class="avatar avatar-xs avatar-rounded" src="../assets/images/flags/germany_flag.jpg" alt=""> <span class="ms-1">Germany</span>',
         id: 4,
     },
     {
         value: "5",
-        label:
-            '<img class="avatar avatar-xs avatar-rounded" src="../assets/images/flags/italy_flag.jpg" alt=""> <span class="ms-1">Italy</span>',
+        label: '<img class="avatar avatar-xs avatar-rounded" src="../assets/images/flags/italy_flag.jpg" alt=""> <span class="ms-1">Italy</span>',
         id: 5,
     },
     {
         value: "6",
-        label:
-            '<img class="avatar avatar-xs avatar-rounded" src="../assets/images/flags/russia_flag.jpg" alt=""> <span class="ms-1">Netherlands</span>',
+        label: '<img class="avatar avatar-xs avatar-rounded" src="../assets/images/flags/russia_flag.jpg" alt=""> <span class="ms-1">Netherlands</span>',
         id: 6,
     },
     {
         value: "7",
-        label:
-            '<img class="avatar avatar-xs avatar-rounded" src="../assets/images/flags/argentina_flag.jpg" alt=""> <span class="ms-1">Argentina</span>',
+        label: '<img class="avatar avatar-xs avatar-rounded" src="../assets/images/flags/argentina_flag.jpg" alt=""> <span class="ms-1">Argentina</span>',
         id: 7,
     },
     {
         value: "8",
-        label:
-            '<img class="avatar avatar-xs avatar-rounded" src="../assets/images/flags/argentina_flag.jpg" alt=""> <span class="ms-1">Argentina</span>',
+        label: '<img class="avatar avatar-xs avatar-rounded" src="../assets/images/flags/argentina_flag.jpg" alt=""> <span class="ms-1">Argentina</span>',
         id: 8,
     },
 ];
