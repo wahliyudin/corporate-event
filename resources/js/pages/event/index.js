@@ -134,7 +134,7 @@ import resetForm from "../../tools/crud-manager/reset-form.js";
     function loadEventCategories() {
         const itemCategory = function (category) {
             return `
-                <div class="fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event" style="background-color: ${category.color}; border-color: ${category.color};">
+                <div data-id="${category.id}" class="fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event" style="background-color: ${category.color}; border-color: ${category.color};">
                     <div class="fc-event-main">${category.name}</div>
                 </div>
             `;
@@ -164,15 +164,21 @@ import resetForm from "../../tools/crud-manager/reset-form.js";
         });
     }
 
+    let receiveEvent = null;
     var containerEl = document.getElementById('event-categories');
     new FullCalendar.Draggable(containerEl, {
         itemSelector: '.fc-event',
         eventData: function (eventEl) {
+            const bgColor = window.getComputedStyle(eventEl).backgroundColor;
+
             return {
                 title: eventEl.innerText.trim(),
-                title: eventEl.innerText,
-                className: eventEl.className + ' overflow-hidden '
-            }
+                category_id: eventEl.dataset.id,
+                className: eventEl.className + ' overflow-hidden ',
+                backgroundColor: bgColor,
+                borderColor: bgColor,
+                textColor: '#fff'
+            };
         }
     });
     var calendarEl = document.getElementById('calendar-events');
@@ -211,7 +217,8 @@ import resetForm from "../../tools/crud-manager/reset-form.js";
         selectable: true,
         selectMirror: true,
         droppable: true, // this allows things to be dropped onto the calendar
-
+        editable: true,
+        dayMaxEvents: true,
         select: onSelect,
         dateClick: function (info) {
             console.log(info);
@@ -329,14 +336,18 @@ import resetForm from "../../tools/crud-manager/reset-form.js";
                 }
             });
         },
-
-        editable: true,
-        dayMaxEvents: true,
+        eventReceive: function (info) {
+            receiveEvent = info.event;
+            startDate.setDate(info.event.start);
+            endDate.setDate(info.event.end ?? info.event.start);
+            $('#eventForm [name="category"]').val(info.event.extendedProps.category_id).trigger('change');
+            $('#modalFormEvent').modal('show');
+        },
     });
     calendar.render();
 
     function setDetailEvent(event) {
-        $('#modalDetailEvent #btnEdit').data('event', event.id);
+        $('#detailEventId').val(event.id);
         $('#detailEventTitle').text(event.title);
         $('#detailEventDate').text(event.date);
         $('#detailEventCompany').text(event.company);
@@ -355,7 +366,7 @@ import resetForm from "../../tools/crud-manager/reset-form.js";
 
     $(document).on('click', '#modalDetailEvent #btnEdit', function (e) {
         e.preventDefault();
-        const eventId = $(this).data('event');
+        const eventId = $('#detailEventId').val();
         $.ajax({
             url: `${origin}/events/${eventId}/edit`,
             method: 'GET',
@@ -378,6 +389,50 @@ import resetForm from "../../tools/crud-manager/reset-form.js";
             }
         });
     });
+
+    $(document).on('click', '#modalDetailEvent #btnDelete', function (e) {
+        e.preventDefault();
+        const eventId = $('#detailEventId').val();
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `${origin}/events/${eventId}/destroy`,
+                    method: 'DELETE',
+                    success: function (response) {
+                        $('#modalDetailEvent').modal('hide');
+                        calendar.refetchEvents();
+                        toastSuccess('Event successfully deleted!');
+                    },
+                    error: function (xhr, status, error) {
+                        toastError(`Failed to delete event <br>${xhr.responseJSON?.message || error.statusText || "Unknown error"}`);
+                    }
+                });
+            }
+        });
+    });
+
+    $(document).on('click', '#btnCreateEvent', function (e) {
+        e.preventDefault();
+        resetForm('#eventForm');
+        location.setData('');
+        description.setData('');
+        $('#modalFormEvent').modal('show');
+    });
+
+
+    $('#modalFormEvent').on('hidden.bs.modal', function () {
+        receiveEvent?.remove();
+        receiveEvent = null;
+    });
+
 
     var formValidator = $('#eventForm').validate({
         ignore: ':hidden:not(.chosen) :hidden:not(.ckeditor)',
@@ -414,6 +469,8 @@ import resetForm from "../../tools/crud-manager/reset-form.js";
                 location?.setData('');
                 calendar.refetchEvents();
                 resetForm('#eventForm');
+                receiveEvent?.remove();
+                receiveEvent = null;
                 $('#modalFormEvent').modal('hide');
             },
             error: function (xhr, status, error) {

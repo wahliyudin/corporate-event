@@ -63,4 +63,17 @@ class EventController extends Controller
             throw $th;
         }
     }
+
+    public function destroy($id)
+    {
+        try {
+            $this->service->destroy($id);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Event successfully deleted!'
+            ]);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

@@ -87,4 +87,9 @@ class EventService
             'end_date'   => $event->end_date->timezone('Asia/Jakarta')->toIso8601String(),
         ];
     }
+
+    public function destroy($id)
+    {
+        return Event::query()->findOrFail($id)->delete();
+    }
 }

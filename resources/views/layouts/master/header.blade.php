@@ -27,7 +27,7 @@
             <div class="header-element">
                 <div class="d-flex align-items-center gap-2">
                     <h5 class="fw-semibold mb-1">Corporate Event Calendar</h5>
-                    <span class="text-sm text-slate-500">Holding Group — Master Calendar (2025)</span>
+                    <span class="text-sm text-slate-500">Holding Group — Master Calendar</span>
                 </div>
             </div>
         </div>

@@ -5,7 +5,7 @@
         <div class="col-xl-3">
             <div class="card custom-card">
                 <div class="card-header d-grid">
-                    <button class="btn btn-primary-light btn-wave">
+                    <button id="btnCreateEvent" class="btn btn-primary-light btn-wave">
                         <i class="ri-add-line align-middle me-1 fw-semibold d-inline-block"></i>
                         <span>Create New Event</span>
                     </button>
@@ -94,6 +94,69 @@
                     <div id='calendar-events'></div>
                 </div>
             </div>
+            <div class="card custom-card">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Upcoming Events</h5>
+
+                    <ul class="list-unstyled" id="eventList">
+                        <!-- Event Item 1 -->
+                        <li class="border rounded p-3 mb-3">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <div class="fw-semibold">Annual Townhall</div>
+                                    <div class="text-muted small">
+                                        Mar 20, 2025 — Jakarta Convention Center — PIC: CorpCom / HR
+                                    </div>
+                                    <div class="small mt-2">
+                                        Townhall Q1 — company update and awards. Status:
+                                        <span class="fw-semibold">Confirmed</span>
+                                    </div>
+                                </div>
+
+                                <div class="text-end ">
+                                    <div class="text-muted small">Holding</div>
+
+                                    <div class="mt-2">
+                                        <button class="btn btn-link btn-sm p-0 me-2">Edit</button>
+                                        <button class="btn btn-link text-danger btn-sm p-0">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <!-- Event Item 2 -->
+                        <li class="border rounded p-3 mb-3">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <div class="fw-semibold">CSR Beach Cleanup</div>
+                                    <div class="text-muted small">
+                                        Apr 5, 2025 — Anyer Beach — PIC: Sustainability Team
+                                    </div>
+                                    <div class="small mt-2">
+                                        CSR activity with local community. Status:
+                                        <span class="fw-semibold">Planned</span>
+                                    </div>
+                                </div>
+
+                                <div class="text-end">
+                                    <div class="text-muted small">Subsidiary A</div>
+
+                                    <div class="mt-2">
+                                        <button class="btn btn-link btn-sm p-0 me-2">Edit</button>
+                                        <button class="btn btn-link text-danger btn-sm p-0">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="text-center mt-2">
+                        <a href="#" class="btn btn-link small">
+                            View All
+                            <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
@@ -119,7 +182,8 @@
                             <div class="col-md-6 start-date-container">
                                 <label for="start_date" class="form-label">Start Date</label>
                                 <div class="input-group ">
-                                    <input name="start_date" type="text" class="form-control" placeholder="Start Date" />
+                                    <input name="start_date" type="text" class="form-control"
+                                        placeholder="Start Date" />
                                     <span class="input-group-text">WIB</span>
                                 </div>
                             </div>
@@ -127,7 +191,8 @@
                             <div class="col-md-6 end-date-container">
                                 <label for="end_date" class="form-label">End Date</label>
                                 <div class="input-group">
-                                    <input name="end_date" type="text" class="form-control" placeholder="Start Date" />
+                                    <input name="end_date" type="text" class="form-control"
+                                        placeholder="Start Date" />
                                     <span class="input-group-text">WIB</span>
                                 </div>
                             </div>
@@ -156,6 +221,7 @@
                             <div class="col-md-6 status-container">
                                 <label for="status" class="form-label">Status</label>
                                 <select name="status" class="form-select">
+                                    <option value="" selected disabled>- Select -</option>
                                     @foreach (App\Enums\Event\Status::cases() as $status)
                                         <option value="{{ $status->value }}">
                                             {{ $status->label() }}
@@ -204,6 +270,7 @@
                 </div>
 
                 <div class="modal-body pt-2">
+                    <input type="hidden" name="id" id="detailEventId">
                     <div class="p-3 rounded-4 border bg-light">
                         <div class="d-flex align-items-start mb-3">
                             <div class="me-3 text-primary">
@@ -281,7 +348,8 @@
 
                 <!-- FOOTER -->
                 <div class="modal-footer border-0 pt-0">
-                    <button type="button" class="btn btn-primary" data-event="" id="btnEdit">Edit</button>
+                    <button type="button" class="btn btn-danger" id="btnDelete">Delete</button>
+                    <button type="button" class="btn btn-primary" id="btnEdit">Edit</button>
                     <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
 
@@ -305,6 +373,11 @@
 
         .modal {
             transform: none !important;
+        }
+
+        #full-calendar-activity {
+            min-height: 34rem !important;
+            max-height: 34rem !important;
         }
     </style>
 @endpush

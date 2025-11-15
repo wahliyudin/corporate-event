@@ -14,6 +14,7 @@ Route::get('events/example', [EventController::class, 'example'])->name('event.e
 Route::post('events/store', [EventController::class, 'store'])->name('event.store');
 Route::post('events/{id}/move', [EventController::class, 'move'])->name('event.move');
 Route::get('events/{id}/edit', [EventController::class, 'edit'])->name('event.edit');
+Route::delete('events/{id}/destroy', [EventController::class, 'destroy'])->name('event.destroy');
 
 Route::get('events/category/data-select', [EventCategoryController::class, 'dataSelect'])->name('event.category.data-select');
 
