@@ -14,6 +14,12 @@ export default defineConfig({
                 'resources/js/layouts/custom-switcher.js',
                 'resources/js/layouts/default-menu.js',
 
+                'resources/js/pages/auth/login.js',
+                'resources/js/pages/auth/register.js',
+                'resources/js/pages/auth/email.js',
+                'resources/js/pages/auth/reset.js',
+                'resources/js/pages/auth/confirm.js',
+
                 'resources/js/pages/event/index.js',
             ],
             refresh: true,

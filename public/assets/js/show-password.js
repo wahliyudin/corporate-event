@@ -4,6 +4,8 @@
 // for show password 
 let createpassword = (type, ele) => {
     document.getElementById(type).type = document.getElementById(type).type == "password" ? "text" : "password"
+    console.log(ele.childNodes);
+
     let icon = ele.childNodes[0].classList
     let stringIcon = icon.toString()
     if (stringIcon.includes("ri-eye-line")) {

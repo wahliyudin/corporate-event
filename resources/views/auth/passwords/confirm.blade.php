@@ -1,49 +1,51 @@
-@extends('layouts.app')
+@extends('layouts.auth')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Confirm Password') }}</div>
+    <div class="card custom-card">
+        <div class="card-body p-5">
+            <p class="h5 fw-semibold mb-2 text-center">Confirm Password</p>
+            <p class="mb-4 text-muted op-7 fw-normal text-center">
+                Please confirm your password before continuing.
+            </p>
+            {{-- password/confirm --}}
+            <form id="formConfirmPassword">
+                <div class="row gy-3">
+                    <div class="col-xl-12">
+                        <label for="password" class="form-label text-default d-block">
+                            Password
+                            @if (Route::has('password.request'))
+                                <a class="float-end text-danger" href="{{ route('password.request') }}">
+                                    {{ __('Forgot Your Password?') }}
+                                </a>
+                            @endif
+                        </label>
 
-                <div class="card-body">
-                    {{ __('Please confirm your password before continuing.') }}
-
-                    <form method="POST" action="{{ route('password.confirm') }}">
-                        @csrf
-
-                        <div class="row mb-3">
-                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
+                        <div class="input-group">
+                            <input id="password" type="password" class="form-control form-control-lg" name="password"
+                                required autocomplete="current-password">
+                            <button class="btn btn-light" type="button" onclick="createpassword('password',this)"
+                                id="button-addon2"><i class="ri-eye-off-line align-middle"></i></button>
                         </div>
-
-                        <div class="row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Confirm Password') }}
-                                </button>
-
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
-                    </form>
+                    </div>
+                    <div class="col-xl-12 d-grid mt-2">
+                        <button type="button" id="btnSubmit" class="btn btn-lg btn-primary">
+                            <span class="indicator-label">
+                                <div class="d-flex align-items-center justify-content-center gap-2">
+                                    <span>Confirm Password</span>
+                                </div>
+                            </span>
+                            <span class="indicator-progress">
+                                <span class="spinner-border spinner-border-sm align-middle"></span>
+                                <span class="ms-2">Please wait...</span>
+                            </span>
+                        </button>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
-</div>
 @endsection
+
+@push('js')
+    @vite(['resources/js/pages/auth/confirm.js'])
+@endpush

@@ -1,47 +1,45 @@
-@extends('layouts.app')
+@extends('layouts.auth')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Reset Password') }}</div>
+    <div class="card custom-card">
+        <div class="card-body p-5">
+            <p class="h5 fw-semibold mb-2 text-center">Forgot Password</p>
+            <p class="mb-4 text-muted op-7 fw-normal text-center">Enter your email to receive reset instructions</p>
+            {{-- password/email --}}
+            <form id="formForgotPassword">
+                <div class="row gy-3">
+                    <div class="col-xl-12">
+                        <label for="email" class="form-label text-default">Email</label>
+                        <input id="email" type="email" class="form-control form-control-lg" name="email"
+                            value="user@gmail.com" required autocomplete="email" autofocus>
+                    </div>
+                    <div class="col-xl-12 d-grid mt-2">
+                        <button type="button" id="btnSubmit" class="btn btn-lg btn-primary">
+                            <span class="indicator-label">
+                                <div class="d-flex align-items-center justify-content-center gap-2">
+                                    <span>Send Password Reset Link</span>
+                                </div>
+                            </span>
+                            <span class="indicator-progress">
+                                <span class="spinner-border spinner-border-sm align-middle"></span>
+                                <span class="ms-2">Please wait...</span>
+                            </span>
+                        </button>
+                    </div>
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    <form method="POST" action="{{ route('password.email') }}">
-                        @csrf
-
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Send Password Reset Link') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
                 </div>
+            </form>
+
+            <div class="text-center">
+                <p class="fs-12 text-muted mt-3">
+                    Remember your password?
+                    <a href="{{ route('login') }}" class="text-primary">Sign In</a>
+                </p>
             </div>
         </div>
     </div>
-</div>
 @endsection
+
+@push('js')
+    @vite(['resources/js/pages/auth/email.js'])
+@endpush

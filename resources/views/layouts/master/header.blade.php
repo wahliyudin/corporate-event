@@ -54,7 +54,7 @@
                         document.getElementById('logout-form').submit();">
                             <i class="ti ti-logout fs-18 me-2 op-7"></i>Log Out
                         </a>
-                        <form id="logout-form" action="" method="POST" class="d-none">
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                             @csrf
                         </form>
                     </li>
