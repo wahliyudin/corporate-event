@@ -20,6 +20,8 @@ export default defineConfig({
                 'resources/js/pages/auth/reset.js',
                 'resources/js/pages/auth/confirm.js',
 
+                'resources/js/pages/company/index.js',
+
                 'resources/js/pages/event/index.js',
             ],
             refresh: true,
