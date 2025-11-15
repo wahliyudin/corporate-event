@@ -11,35 +11,7 @@
                     </button>
                 </div>
                 <div class="card-body p-0">
-                    <div id="external-events" class="border-bottom p-3">
-                        <div
-                            class="fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-primary border border-primary">
-                            <div class="fc-event-main">Calendar Events</div>
-                        </div>
-                        <div class="fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-secondary border border-secondary"
-                            data-class="bg-secondary">
-                            <div class="fc-event-main">Birthday EVents</div>
-                        </div>
-                        <div class="fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-success border border-success"
-                            data-class="bg-success">
-                            <div class="fc-event-main">Holiday Calendar</div>
-                        </div>
-                        <div class="fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-info border border-info"
-                            data-class="bg-info">
-                            <div class="fc-event-main">Office Events</div>
-                        </div>
-                        <div class="fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-warning border border-warning"
-                            data-class="bg-warning">
-                            <div class="fc-event-main">Other Events</div>
-                        </div>
-                        <div class="fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-danger border border-danger"
-                            data-class="bg-danger">
-                            <div class="fc-event-main">Festival Events</div>
-                        </div>
-                        <div class="fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-teal border border-teal"
-                            data-class="bg-danger">
-                            <div class="fc-event-main">Timeline Events</div>
-                        </div>
+                    <div id="event-categories" class="border-bottom p-3">
                     </div>
                     <div class="p-3">
                         <div class="d-flex align-items-center justify-content-between">
@@ -137,58 +109,65 @@
 
                 <div class="modal-body">
                     <form id="eventForm">
+                        <input type="hidden" name="id">
                         <div class="row g-3">
                             <div class="col-12">
+                                <label for="title" class="form-label">Event Title</label>
                                 <input name="title" required placeholder="Event title" class="form-control" />
                             </div>
 
+                            <div class="col-md-6 start-date-container">
+                                <label for="start_date" class="form-label">Start Date</label>
+                                <div class="input-group ">
+                                    <input name="start_date" type="text" class="form-control" placeholder="Start Date" />
+                                    <span class="input-group-text">WIB</span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 end-date-container">
+                                <label for="end_date" class="form-label">End Date</label>
+                                <div class="input-group">
+                                    <input name="end_date" type="text" class="form-control" placeholder="Start Date" />
+                                    <span class="input-group-text">WIB</span>
+                                </div>
+                            </div>
+
                             <div class="col-md-6 company-container">
-                                <select name="company" class="form-select">
-                                    <option value="holding">Holding</option>
-                                    <option value="sub-a">Subsidiary A</option>
-                                    <option value="sub-b">Subsidiary B</option>
-                                    <option value="sub-c">Subsidiary C</option>
-                                    <option value="sub-d">Subsidiary D</option>
-                                </select>
+                                <label for="company" class="form-label">Company</label>
+                                <select name="company" class="form-select"></select>
                             </div>
 
                             <div class="col-md-6 category-container">
-                                <select name="category" class="form-select">
-                                    <option value="branding">Corporate Branding</option>
-                                    <option value="csr">CSR & Community</option>
-                                    <option value="internal">Internal Engagement</option>
-                                    <option value="forum">Business & Innovation</option>
-                                    <option value="training">Training & Leadership</option>
-                                    <option value="religious">Religious / Holiday</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-6">
-                                <input name="start_date" type="text" class="form-control" placeholder="Start Date" />
-                            </div>
-
-                            <div class="col-md-6">
-                                <input name="end_date" type="text" class="form-control" placeholder="End Date" />
+                                <label for="category" class="form-label">Category</label>
+                                <select name="category" class="form-select"></select>
                             </div>
 
                             <div class="col-12">
-                                <input name="location" placeholder="Location" class="form-control" />
+                                <label for="location" class="form-label">Location</label>
+                                <div id="location_toolbar"></div>
+                                <div id="location" class="border border-2" style="min-height: 80px;"></div>
                             </div>
 
                             <div class="col-md-6">
+                                <label for="pic" class="form-label">PIC / Penanggung Jawab</label>
                                 <input name="pic" placeholder="PIC / Penanggung Jawab" class="form-control" />
                             </div>
 
                             <div class="col-md-6 status-container">
+                                <label for="status" class="form-label">Status</label>
                                 <select name="status" class="form-select">
-                                    <option>Planned</option>
-                                    <option>Confirmed</option>
-                                    <option>Tentative</option>
+                                    @foreach (App\Enums\Event\Status::cases() as $status)
+                                        <option value="{{ $status->value }}">
+                                            {{ $status->label() }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
 
                             <div class="col-12">
-                                <textarea name="description" placeholder="Description" rows="3" class="form-control"></textarea>
+                                <label for="description" class="form-label">Description</label>
+                                <div id="description_toolbar"></div>
+                                <div id="description" class="border border-2" style="min-height: 150px;"></div>
                             </div>
                         </div>
                     </form>
@@ -213,12 +192,121 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modalDetailEvent" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content shadow-lg border-0 rounded-4">
+                <div class="modal-header border-0 pb-0">
+                    <div>
+                        <h5 class="modal-title fw-bold" id="detailEventTitle"></h5>
+                        <small class="text-muted">Detail Event</small>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body pt-2">
+                    <div class="p-3 rounded-4 border bg-light">
+                        <div class="d-flex align-items-start mb-3">
+                            <div class="me-3 text-primary">
+                                <i class="fa-regular fa-calendar-days fa-xl"></i>
+                            </div>
+                            <div>
+                                <div class="fw-semibold text-muted mb-1">Date & Time</div>
+                                <div class="fw-bold" id="detailEventDate">10 Nov 2025, 08:00 - 10:00 WIB</div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-start mb-3">
+                            <div class="me-3 text-success">
+                                <i class="fa-solid fa-building fa-xl"></i>
+                            </div>
+                            <div>
+                                <div class="fw-semibold text-muted mb-1">Company</div>
+                                <div class="fw-bold" id="detailEventCompany">Tech Corp</div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-start mb-3">
+                            <div class="me-3 text-warning">
+                                <i class="fa-solid fa-tags fa-xl"></i>
+                            </div>
+                            <div>
+                                <div class="fw-semibold text-muted mb-1">Category</div>
+                                <div class="fw-bold" id="detailEventCategory">Meeting</div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-start mb-3">
+                            <div class="me-3 text-info">
+                                <i class="fa-solid fa-user-tie fa-xl"></i>
+                            </div>
+                            <div>
+                                <div class="fw-semibold text-muted mb-1">PIC</div>
+                                <div class="fw-bold" id="detailEventPIC">John Doe</div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-start mb-3">
+                            <div class="me-3 text-secondary">
+                                <i class="fa-solid fa-circle-check fa-xl"></i>
+                            </div>
+                            <div>
+                                <div class="fw-semibold text-muted mb-1">Status</div>
+                                <div class="fw-bold" id="detailEventStatus">Approved</div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-start">
+                            <div class="me-3 text-dark">
+                                <i class="fa-solid fa-align-left fa-xl"></i>
+                            </div>
+                            <div>
+                                <div class="fw-semibold text-muted mb-1">Description</div>
+                                <div class="fw-bold" id="detailEventDescription"></div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-start mb-3">
+                            <div class="me-3 text-danger">
+                                <i class="fa-solid fa-location-dot fa-xl"></i>
+                            </div>
+                            <div>
+                                <div class="fw-semibold text-muted mb-1">Location</div>
+                                <div class="fw-bold" id="detailEventLocation"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- FOOTER -->
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-primary" data-event="" id="btnEdit">Edit</button>
+                    <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 @endpush
 
 @push('css')
     <link rel="stylesheet" href="{{ asset('assets/libs/sweetalert2/sweetalert2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/fullcalendar/main.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/select2/select2.min.css') }}">
+    <style>
+        #event-categories .fc-event {
+            cursor: move;
+            margin: 0 0 0.4rem 0;
+            padding: 0.375rem 0.75rem;
+            font-size: 0.75rem;
+            border-radius: 0.35rem;
+        }
+
+        .modal {
+            transform: none !important;
+        }
+    </style>
 @endpush
 
 @push('js')
@@ -227,7 +315,9 @@
     <script src="{{ asset('assets/libs/jquery-validate/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('assets/libs/moment/moment.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.43/moment-timezone-with-data.min.js"></script>
     <script src="{{ asset('assets/libs/fullcalendar/main.min.js') }}"></script>
     <script src="{{ asset('assets/libs/flatpickr/flatpickr.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/ckeditor/ckeditor-document.bundle.js') }}"></script>
     @vite(['resources/js/pages/event/index.js'])
 @endpush

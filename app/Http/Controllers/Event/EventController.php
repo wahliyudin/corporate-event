@@ -3,10 +3,16 @@
 namespace App\Http\Controllers\Event;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\Event\MoveRequest;
+use App\Http\Requests\Event\StoreRequest;
+use App\Services\Event\EventService;
 
 class EventController extends Controller
 {
+    public function __construct(
+        private EventService $service
+    ) {}
+
     public function index()
     {
         return view('event.index');
@@ -19,25 +25,42 @@ class EventController extends Controller
 
     public function dataCalendar()
     {
-        return response()->json([
-            [
-                'id' => '7',
-                'title' => 'Event 1',
-                'start' => '2025-11-01',
-                'end' => '2025-11-02',
-                'description' => 'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary',
-                'example' => 'Example'
-            ],
-            [
-                'title' => 'Event 2',
-                'start' => '2025-11-03',
-                'end' => '2025-11-04',
-            ],
-        ]);
+        $data = $this->service->dataCalendar();
+        return response()->json($data);
     }
 
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        dd($request->all());
+        try {
+            $this->service->store($request->validated());
+            return response()->json([
+                'message' => 'Event saved successfully'
+            ]);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function move($id, MoveRequest $request)
+    {
+        try {
+            $this->service->move($id, $request->validated());
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Event successfully moved!'
+            ]);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function edit($id)
+    {
+        try {
+            $data = $this->service->edit($id);
+            return response()->json($data);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }

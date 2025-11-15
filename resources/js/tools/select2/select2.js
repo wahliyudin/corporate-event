@@ -1,3 +1,4 @@
+import handleAjaxError from "../handle-ajax-error.js";
 import { toastWarning } from "../toast/toast.js";
 
 (function ($) {
@@ -183,6 +184,10 @@ import { toastWarning } from "../toast/toast.js";
                             $element.val(apiOptions.selected).trigger('change');
                         }
                     },
+                    error: (response) => {
+                        $element.empty().append('<option selected disabled value="">Failed to load...</option>');
+                        handleAjaxError(response);
+                    }
                 });
             };
 

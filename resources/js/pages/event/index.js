@@ -3,6 +3,8 @@ import generateValidationRules from "../../tools/crud-manager/generate-validatio
 import handleAjaxError from "../../tools/handle-ajax-error.js";
 import toastMessage from "../../tools/toast/toast-message.js";
 import "../../tools/select2/select2.js";
+import { toastError, toastSuccess, toastWarning } from "../../tools/toast/toast.js";
+import resetForm from "../../tools/crud-manager/reset-form.js";
 
 (function () {
     "use strict";
@@ -13,132 +15,156 @@ import "../../tools/select2/select2.js";
         }
     });
 
-    var curYear = moment().format('YYYY');
-    var curMonth = moment().format('MM');
-    var sptCalendarEvents = {
-        id: 1,
-        events: [{
-            id: '1',
-            start: curYear + '-' + curMonth + '-02',
-            end: curYear + '-' + curMonth + '-03',
-            title: 'Spruko Meetup',
-            backgroundColor: '#845adf',
-            borderColor: '#845adf',
-            description: 'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary'
-        }, {
-            id: '2',
-            start: curYear + '-' + curMonth + '-17',
-            end: curYear + '-' + curMonth + '-17',
-            title: 'Design Review',
-            backgroundColor: '#23b7e5',
-            borderColor: '#23b7e5',
-            description: 'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary'
-        }, {
-            id: '3',
-            start: curYear + '-' + curMonth + '-13',
-            end: curYear + '-' + curMonth + '-13',
-            title: 'Lifestyle Conference',
-            backgroundColor: '#845adf',
-            borderColor: '#845adf',
-            description: 'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary'
-        }, {
-            id: '4',
-            start: curYear + '-' + curMonth + '-21',
-            end: curYear + '-' + curMonth + '-21',
-            title: 'Team Weekly Brownbag',
-            backgroundColor: '#f5b849',
-            borderColor: '#f5b849',
-            description: 'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary'
-        }, {
-            id: '5',
-            start: curYear + '-' + curMonth + '-04T10:00:00',
-            end: curYear + '-' + curMonth + '-06T15:00:00',
-            title: 'Music Festival',
-            backgroundColor: '#26bf94',
-            borderColor: '#26bf94',
-            description: 'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary'
-        }, {
-            id: '6',
-            start: curYear + '-' + curMonth + '-23T13:00:00',
-            end: curYear + '-' + curMonth + '-25T18:30:00',
-            title: 'Attend Lea\'s Wedding',
-            backgroundColor: '#26bf94',
-            borderColor: '#26bf94',
-            description: 'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary'
-        }]
-    };
-    var sptBirthdayEvents = {
-        id: 2,
-        backgroundColor: '#49b6f5',
-        borderColor: '#49b6f5',
-        textColor: '#fff',
-        events: [{
-            id: '7',
-            start: curYear + '-' + curMonth + '-04',
-            end: curYear + '-' + curMonth + '-04',
-            title: 'Harcates Birthday',
-            description: 'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary'
-        }, {
-            id: '8',
-            start: curYear + '-' + curMonth + '-28',
-            end: curYear + '-' + curMonth + '-28',
-            title: 'Bunnysin\'s Birthday',
-            description: 'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary'
-        }, {
-            id: '9',
-            start: curYear + '-' + curMonth + '-31',
-            end: curYear + '-' + curMonth + '-31',
-            title: 'Lee shin\'s Birthday',
-            description: 'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary'
-        }, {
-            id: '10',
-            start: curYear + '-' + 11 + '-11',
-            end: curYear + '-' + 11 + '-11',
-            title: 'Shinchan\'s Birthday',
-            description: 'All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary'
-        },]
-    };
-    var sptHolidayEvents = {
-        id: 3,
-        backgroundColor: '#e6533c',
-        borderColor: '#e6533c',
-        textColor: '#fff',
-        events: [{
-            id: '10',
-            start: curYear + '-' + curMonth + '-05',
-            end: curYear + '-' + curMonth + '-08',
-            title: 'Festival Day'
-        }, {
-            id: '11',
-            start: curYear + '-' + curMonth + '-18',
-            end: curYear + '-' + curMonth + '-19',
-            title: 'Memorial Day'
-        }, {
-            id: '12',
-            start: curYear + '-' + curMonth + '-25',
-            end: curYear + '-' + curMonth + '-26',
-            title: 'Diwali'
-        }]
-    };
-    var sptOtherEvents = {
-        id: 4,
-        backgroundColor: '#23b7e5',
-        borderColor: '#23b7e5',
-        textColor: '#fff',
-        events: [{
-            id: '13',
-            start: curYear + '-' + curMonth + '-07',
-            end: curYear + '-' + curMonth + '-09',
-            title: 'My Rest Day'
-        }, {
-            id: '13',
-            start: curYear + '-' + curMonth + '-29',
-            end: curYear + '-' + curMonth + '-31',
-            title: 'My Rest Day'
-        }]
-    };
+    if ($('#eventForm [name="company"]').length) {
+        $('#eventForm [name="company"]').objSelect2({
+            dropdownParent: $('#eventForm .company-container'),
+            api: {
+                url: `${origin}/companies/data-select`,
+                method: 'GET',
+                firstOption: '<option selected disabled value="">- Select -</option>'
+            },
+        });
+    }
 
-    var containerEl = document.getElementById('external-events');
+    if ($('#eventForm [name="category"]').length) {
+        $('#eventForm [name="category"]').objSelect2({
+            dropdownParent: $('#eventForm .category-container'),
+            api: {
+                url: `${origin}/events/category/data-select`,
+                method: 'GET',
+                firstOption: '<option selected disabled value="">- Select -</option>'
+            },
+        });
+    }
+
+    if ($('#eventForm [name="status"]').length) {
+        $('#eventForm [name="status"]').objSelect2({
+            dropdownParent: $('#eventForm .status-container'),
+        });
+    }
+
+    let startDate = null;
+    if ($('#eventForm [name="start_date"]').length) {
+        startDate = flatpickr('#eventForm [name="start_date"]', {
+            appendTo: document.querySelector(".modal"),
+            altInput: true,
+            altFormat: "d F Y H:i",
+            dateFormat: "Y-m-d H:i",
+            enableTime: true,
+        });
+    }
+
+    let endDate = null;
+    if ($('#eventForm [name="end_date"]').length) {
+        endDate = flatpickr('#eventForm [name="end_date"]', {
+            appendTo: document.querySelector(".modal"),
+            altInput: true,
+            altFormat: "d F Y H:i",
+            dateFormat: "Y-m-d H:i",
+            enableTime: true,
+        });
+    }
+
+    let description = null;
+    if ($('#eventForm #description').length) {
+        DecoupledEditor
+            .create(document.querySelector(`#eventForm #description`), {
+                placeholder: 'Your content here...',
+                toolbar: {
+                    items: [
+                        'undo', 'redo',
+                        '|',
+                        'heading', 'alignment',
+                        '|',
+                        'fontfamily', 'fontsize', 'fontColor', 'fontBackgroundColor',
+                        '|',
+                        'bold', 'italic', 'strikethrough',
+                        '|',
+                        'blockQuote', 'codeBlock',
+                        '|',
+                        'bulletedList', 'numberedList', 'outdent', 'indent'
+                    ],
+                    shouldNotGroupWhenFull: false
+                },
+            })
+            .then(editor => {
+                const toolbarContainer = document.querySelector(`#eventForm #description_toolbar`);
+                toolbarContainer.appendChild(editor.ui.view.toolbar.element);
+                description = editor;
+            })
+            .catch(error => {
+                toastWarning(error);
+            });
+    }
+
+    let location = null;
+    if ($('#eventForm #location').length) {
+        DecoupledEditor
+            .create(document.querySelector(`#eventForm #location`), {
+                placeholder: 'Your content here...',
+                toolbar: {
+                    items: [
+                        'undo', 'redo',
+                        '|',
+                        'heading', 'alignment',
+                        '|',
+                        'fontfamily', 'fontsize', 'fontColor', 'fontBackgroundColor',
+                        '|',
+                        'bold', 'italic', 'strikethrough',
+                        '|',
+                        'blockQuote', 'codeBlock',
+                        '|',
+                        'bulletedList', 'numberedList', 'outdent', 'indent'
+                    ],
+                    shouldNotGroupWhenFull: false
+                },
+            })
+            .then(editor => {
+                const toolbarContainer = document.querySelector(`#eventForm #location_toolbar`);
+                toolbarContainer.appendChild(editor.ui.view.toolbar.element);
+                location = editor;
+            })
+            .catch(error => {
+                toastWarning(error);
+            });
+    }
+
+    loadEventCategories();
+
+    function loadEventCategories() {
+        const itemCategory = function (category) {
+            return `
+                <div class="fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event" style="background-color: ${category.color}; border-color: ${category.color};">
+                    <div class="fc-event-main">${category.name}</div>
+                </div>
+            `;
+        }
+        const loader = `
+            <div class="d-flex justify-content-center" id="event-categories-loading">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        `;
+        $('#event-categories').html(loader);
+        $.ajax({
+            url: `${origin}/events/category/data-select`,
+            type: 'GET',
+            success: function (res) {
+                $('#event-categories').html(res.data.map(itemCategory).join(''));
+            },
+            error: function (err) {
+                $('#event-categories').html(`
+                    <div class="alert alert-danger">
+                        <h6 class="alert-heading">Failed to load categories!</h6>
+                        <p class="mb-0">${err.responseJSON.message}</p>
+                    </div>
+                `);
+            }
+        });
+    }
+
+    var containerEl = document.getElementById('event-categories');
     new FullCalendar.Draggable(containerEl, {
         itemSelector: '.fc-event',
         eventData: function (eventEl) {
@@ -152,12 +178,20 @@ import "../../tools/select2/select2.js";
     var calendarEl = document.getElementById('calendar-events');
 
     var calendar = new FullCalendar.Calendar(calendarEl, {
+        timeZone: 'Asia/Jakarta',
         events: function (fetchInfo, successCallback, failureCallback) {
             $.ajax({
                 url: '/events/data-calendar',
                 type: 'GET',
                 success: function (res) {
-                    successCallback(res);
+                    successCallback(res.map(function (event) {
+                        const start = moment.tz(event.start, "Asia/Jakarta");
+                        const end = moment.tz(event.end, "Asia/Jakarta");
+                        if (!start.isSame(end, 'day')) {
+                            event.end = end.add(1, 'day').format('YYYY-MM-DD HH:mm:ss');
+                        }
+                        return event;
+                    }));
                 },
                 error: function () {
                     alert('Gagal mengambil data event.');
@@ -179,30 +213,171 @@ import "../../tools/select2/select2.js";
         droppable: true, // this allows things to be dropped onto the calendar
 
         select: onSelect,
-        eventClick: function (arg) {
-            console.log(arg.event);
+        dateClick: function (info) {
+            console.log(info);
+        },
+        eventClick: function (info) {
+            const eventData = {
+                id: info.event.id,
+                title: info.event.title,
+                start_date: info.event.start,
+                end_date: info.event.end || info.event.start,
+                extendedProps: info.event.extendedProps
+            };
+
+            setDetailEvent({
+                id: eventData.id,
+                title: eventData.title,
+                date: eventData.extendedProps.date_str,
+                company: eventData.extendedProps?.company || '',
+                category: eventData.extendedProps?.event_category || '',
+                location: eventData.extendedProps?.location || '',
+                pic: eventData.extendedProps?.pic || '',
+                status: eventData.extendedProps?.status || '',
+                description: eventData.extendedProps?.description || ''
+            });
+            $('#modalDetailEvent').modal('show');
+            info.jsEvent.preventDefault();
+        },
+        eventDrop: function (info) {
+            const oldStart = moment(info.oldEvent.startStr);
+            const oldEnd = info.oldEvent.end ? moment(info.oldEvent.endStr) : null;
+            let newStart = moment(info.event.startStr);
+            let newEnd = info.event.end ? moment(info.event.endStr) : null;
+            newStart = moment(
+                newStart.format("YYYY-MM-DD") + " " + oldStart.format("HH:mm"),
+                "YYYY-MM-DD HH:mm"
+            );
+            if (newEnd && oldEnd) {
+                newEnd = moment(
+                    newEnd.format("YYYY-MM-DD") + " " + oldEnd.format("HH:mm"),
+                    "YYYY-MM-DD HH:mm"
+                );
+            }
+            if (!newStart.isSame(newEnd, 'day')) {
+                newStart = newStart.add(1, 'day');
+            }
+            newStart = newStart.toDate();
+            newEnd = newEnd ? newEnd.toDate() : null;
+            info.event.setStart(newStart);
+            if (newEnd) info.event.setEnd(newEnd);
+            Swal.fire({
+                title: "Confirmation",
+                html: (() => {
+                    const start = moment.tz(info.event.start, "Asia/Jakarta").subtract(1, "day");
+                    const endRaw = info.event.end;
+                    let end = endRaw ? moment.tz(endRaw, "Asia/Jakarta").subtract(1, "day") : null;
+
+                    if (!end || start.isSame(end, "day")) {
+                        return `
+                            Move event to:<br>
+                            <strong>${start.add(1, "day").format("DD MMM YYYY, HH:mm")}</strong>
+                            - <strong>${end ? end.format("HH:mm") : ""} WIB</strong>?
+                        `;
+                    } else {
+                        return `
+                            Move event to:<br>
+                            <strong>${start.format("DD MMM YYYY, HH:mm")}</strong>
+                            - <strong>${end.format("DD MMM YYYY, HH:mm")} WIB</strong>?
+                        `;
+                    }
+                })(),
+
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, move it!",
+                showLoaderOnConfirm: true,
+                allowOutsideClick: () => !Swal.isLoading(),
+                preConfirm: async () => {
+                    try {
+                        const start = moment.tz(info.event.start, "Asia/Jakarta");
+                        const end = moment.tz(info.event.end, "Asia/Jakarta");
+                        if (!start.isSame(end, 'day')) {
+                            start.subtract(1, "day");
+                            end.subtract(1, "day");
+                        }
+                        const response = await $.ajax({
+                            url: `${origin}/events/${info.event.id}/move`,
+                            method: "POST",
+                            data: {
+                                start: start.format('YYYY-MM-DD HH:mm:ss'),
+                                end: end.format('YYYY-MM-DD HH:mm:ss')
+                            }
+                        });
+                        if (!response || response.status !== "success") {
+                            throw new Error("Server returned error");
+                        }
+                        return true;
+                    } catch (error) {
+                        Swal.showValidationMessage(
+                            `Failed to move event.<br>Error: ${error.responseJSON?.message || error.statusText || "Unknown error"}`
+                        );
+                        return false;
+                    }
+                }
+
+            }).then((result) => {
+                if (result.isDismissed) {
+                    info.revert();
+                    return;
+                }
+                if (result.isConfirmed) {
+                    toastSuccess('Event successfully moved!');
+                    calendar.refetchEvents();
+                }
+            });
         },
 
         editable: true,
-        dayMaxEvents: true, // allow "more" link when too many events
-        // eventSources: [sptCalendarEvents, sptBirthdayEvents, sptHolidayEvents, sptOtherEvents],
+        dayMaxEvents: true,
     });
     calendar.render();
 
-    function onSelect(arg) {
-        $('#modalFormEvent').modal('show');
-
-        // var title = prompt('Event Title:');
-        // if (title) {
-        //     calendar.addEvent({
-        //         title: title,
-        //         start: arg.start,
-        //         end: arg.end,
-        //         allDay: arg.allDay
-        //     })
-        // }
-        // calendar.unselect()
+    function setDetailEvent(event) {
+        $('#modalDetailEvent #btnEdit').data('event', event.id);
+        $('#detailEventTitle').text(event.title);
+        $('#detailEventDate').text(event.date);
+        $('#detailEventCompany').text(event.company);
+        $('#detailEventCategory').text(event.category);
+        $('#detailEventLocation').html(event.location);
+        $('#detailEventPIC').text(event.pic);
+        $('#detailEventStatus').text(event.status);
+        $('#detailEventDescription').html(event.description);
     }
+
+    function onSelect(info) {
+        startDate.setDate(info.startStr);
+        endDate.setDate(moment(info.endStr).subtract(1, "day").format("YYYY-MM-DD HH:mm"));
+        $('#modalFormEvent').modal('show');
+    }
+
+    $(document).on('click', '#modalDetailEvent #btnEdit', function (e) {
+        e.preventDefault();
+        const eventId = $(this).data('event');
+        $.ajax({
+            url: `${origin}/events/${eventId}/edit`,
+            method: 'GET',
+            success: function (response) {
+                $('#modalDetailEvent').modal('hide');
+                $('#modalFormEvent').modal('show');
+                $('#eventForm input[name="id"]').val(response.id);
+                $('#eventForm input[name="title"]').val(response.title);
+                startDate.setDate(response.start_date);
+                endDate.setDate(response.end_date);
+                $('#eventForm select[name="company"]').val(response.company).trigger('change');
+                $('#eventForm select[name="category"]').val(response.category).trigger('change');
+                location.setData(response.location);
+                description.setData(response.description);
+                $('#eventForm input[name="pic"]').val(response.pic);
+                $('#eventForm select[name="status"]').val(response.status).trigger('change');
+            },
+            error: function (xhr, status, error) {
+                toastError(`Failed to load event data <br>${xhr.responseJSON?.message || error.statusText || "Unknown error"}`);
+            }
+        });
+    });
 
     var formValidator = $('#eventForm').validate({
         ignore: ':hidden:not(.chosen) :hidden:not(.ckeditor)',
@@ -225,6 +400,8 @@ import "../../tools/select2/select2.js";
         }
 
         const formData = new FormData($('#eventForm')[0]);
+        formData.append('description', description?.getData());
+        formData.append('location', location?.getData());
         $.ajax({
             url: `${origin}/events/store`,
             method: 'POST',
@@ -233,53 +410,20 @@ import "../../tools/select2/select2.js";
             contentType: false,
             success: function (response) {
                 toastMessage('success', response.message);
+                description?.setData('');
+                location?.setData('');
+                calendar.refetchEvents();
+                resetForm('#eventForm');
                 $('#modalFormEvent').modal('hide');
             },
             error: function (xhr, status, error) {
                 handleAjaxError(xhr);
             }
         }).always(function () {
+            calendar.unselect()
             $(button).removeAttr('data-indicator').prop('disabled', false);
         });
     });
-
-    if ($('#eventForm [name="company"]').length) {
-        $('#eventForm [name="company"]').objSelect2({
-            dropdownParent: $('#eventForm .company-container'),
-        });
-    }
-
-    if ($('#eventForm [name="category"]').length) {
-        $('#eventForm [name="category"]').objSelect2({
-            dropdownParent: $('#eventForm .category-container'),
-        });
-    }
-
-    if ($('#eventForm [name="status"]').length) {
-        $('#eventForm [name="status"]').objSelect2({
-            dropdownParent: $('#eventForm .status-container'),
-        });
-    }
-
-    if ($('#eventForm [name="start_date"]').length) {
-        flatpickr('#eventForm [name="start_date"]', {
-            altInput: true,
-            altFormat: "d F Y H:i",
-            dateFormat: "Y-m-d H:i",
-            enableTime: true,
-            time_24hr: true,
-        });
-    }
-
-    if ($('#eventForm [name="end_date"]').length) {
-        flatpickr('#eventForm [name="end_date"]', {
-            altInput: true,
-            altFormat: "d F Y H:i",
-            dateFormat: "Y-m-d H:i",
-            enableTime: true,
-            time_24hr: true,
-        });
-    }
 
     // for activity scroll
     var myElement1 = document.getElementById('full-calendar-activity');
