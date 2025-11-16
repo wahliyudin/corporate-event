@@ -26,9 +26,17 @@
                 </li>
                 @permission('calendar_read')
                     <li class="slide">
-                        <a href="{{ route('events.index') }}" class="side-menu__item">
+                        <a href="{{ route('calendar.index') }}" class="side-menu__item">
                             <i class="bx bx-calendar side-menu__icon"></i>
                             <span class="side-menu__label">Calendar</span>
+                        </a>
+                    </li>
+                @endpermission
+                @permission('event_read')
+                    <li class="slide">
+                        <a href="{{ route('events.index') }}" class="side-menu__item">
+                            <i class="bx bx-calendar-event side-menu__icon"></i>
+                            <span class="side-menu__label">Event</span>
                         </a>
                     </li>
                 @endpermission
@@ -55,7 +63,7 @@
                                 <a href="javascript:void(0)">Approvals</a>
                             </li>
                             <li class="slide">
-                                <a href="" class="side-menu__item">Event</a>
+                                <a href="{{ route('approvals.event.index') }}" class="side-menu__item">Event</a>
                             </li>
                             <li class="slide">
                                 <a href="{{ route('approvals.user.index') }}" class="side-menu__item">User</a>

@@ -35,6 +35,7 @@ import toastMessage from "./toast/toast-message.js";
             stateSave: false,
             resetFormOnClose: true,
             ajaxDataCallback: null,
+            getFormDataCallback: null,
             dom: null,
             dataSrc: null,
             buttons: null,
@@ -157,6 +158,7 @@ import toastMessage from "./toast/toast-message.js";
 
             $(settings.modalSelector).on('hidden.bs.modal', function () {
                 if (settings.resetFormOnClose) {
+                    $(document).trigger('crud:form-reset');
                     resetForm(settings.formSelector);
                 }
             });
@@ -173,8 +175,10 @@ import toastMessage from "./toast/toast-message.js";
                     toastMessage('warning', settings.warningMessage);
                     return;
                 }
-
-                const formData = new FormData($(settings.formSelector)[0]);
+                let formData = new FormData($(settings.formSelector)[0]);
+                if (typeof settings.getFormDataCallback === 'function') {
+                    formData = settings.getFormDataCallback(formData);
+                }
                 $.ajax({
                     type: POST_METHOD,
                     url: settings.storeDataUrl,
@@ -220,6 +224,7 @@ import toastMessage from "./toast/toast-message.js";
                         $(editButton).removeAttr("data-indicator");
                         $(settings.modalSelector).modal('show');
                         populateFormFields(settings.formSelector, response.data);
+                        $(document).trigger('crud:row-edit', response.data);
                     },
                     error: function (xhr) {
                         $(editButton).removeAttr("data-indicator");
@@ -348,6 +353,11 @@ import toastMessage from "./toast/toast-message.js";
 
         this.setFooterCallback = function (footerCallback) {
             this.settings.footerCallback = footerCallback;
+            return this;
+        };
+
+        this.setGetFormDataCallback = function (getFormDataCallback) {
+            this.settings.getFormDataCallback = getFormDataCallback;
             return this;
         };
 

@@ -1,42 +1,14 @@
 "use strict";
 
-import handleAjaxError from "../../../tools/handle-ajax-error.js";
-import "./../../../tools/crud-manager.js";
-import { action } from "./action.js";
+import handleAjaxError from "../../../tools/handle-ajax-error";
 
 $(function () {
-    window.origin = $('meta[name="url"]').attr('content');
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-
-    var settings = new $.fn.crudManager.Builder()
-        .setDataTableUrl(`${origin}/approvals/user/outstanding-datatable`)
-        .setColumns([
-            {
-                data: 'name',
-                name: 'name'
-            },
-            {
-                data: 'email',
-                name: 'email'
-            },
-            {
-                data: 'company',
-                name: 'company'
-            },
-            {
-                data: null,
-                render: action,
-                orderable: false,
-                searchable: false
-            },
-        ])
-        .build();
-    $('#datatable').crudManager(settings);
-
+    window.origin = $('meta[name="url"]').attr('content');
     $(document).on('click', '#btn-approve', function (e) {
         e.preventDefault();
         var button = this;
@@ -44,7 +16,7 @@ $(function () {
         $(button).attr("data-indicator", "on");
         Swal.fire({
             title: 'Please confirm your approval',
-            text: 'Are you sure you want to approve this user?',
+            text: 'Are you sure you want to approve this event?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -54,8 +26,8 @@ $(function () {
                 return new Promise(function (resolve) {
                     $.ajax({
                         type: "POST",
-                        url: `${origin}/approvals/user/${key}/approve`,
-                        dataType: 'JSON',
+                        url: `${origin}/approvals/event/${key}/approve`,
+                        dataType: 'json',
                     })
                         .done(function (response) {
                             Swal.fire(
@@ -63,7 +35,7 @@ $(function () {
                                 response.message,
                                 'success'
                             ).then(function () {
-                                window.location = `${origin}/approvals/user`;
+                                window.location = `${origin}/approvals/event`;
                             });
                         })
                         .fail(function (xhr) {

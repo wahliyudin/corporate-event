@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Approval\UserController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\Event\CalendarController;
 use App\Http\Controllers\Event\EventCategoryController;
 use App\Http\Controllers\Event\EventController;
+use App\Http\Controllers\Approval\EventController as ApprovalEventController;
 use App\Http\Controllers\Setting\PermissionController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -23,12 +25,18 @@ Route::get('companies/data-select', [CompanyController::class, 'dataSelect'])->n
 
 Route::middleware('auth')->group(function () {
     Route::get('events', [EventController::class, 'index'])->name('events.index');
-    Route::get('events/data-calendar', [EventController::class, 'dataCalendar'])->name('events.data-calendar');
-    Route::get('events/example', [EventController::class, 'example'])->name('events.example');
+    Route::post('events/datatable', [EventController::class, 'datatable'])->name('events.datatable');
     Route::post('events/store', [EventController::class, 'store'])->name('events.store');
-    Route::post('events/{id}/move', [EventController::class, 'move'])->name('events.move');
     Route::get('events/{id}/edit', [EventController::class, 'edit'])->name('events.edit');
     Route::delete('events/{id}/destroy', [EventController::class, 'destroy'])->name('events.destroy');
+
+    Route::get('calendar', [CalendarController::class, 'index'])->name('calendar.index');
+    Route::get('calendar/data-calendar', [CalendarController::class, 'dataCalendar'])->name('calendar.data-calendar');
+    Route::get('calendar/example', [CalendarController::class, 'example'])->name('calendar.example');
+    Route::post('calendar/store', [CalendarController::class, 'store'])->name('calendar.store');
+    Route::post('calendar/{id}/move', [CalendarController::class, 'move'])->name('calendar.move');
+    Route::get('calendar/{id}/edit', [CalendarController::class, 'edit'])->name('calendar.edit');
+    Route::delete('calendar/{id}/destroy', [CalendarController::class, 'destroy'])->name('calendar.destroy');
 
     Route::get('events/categories', [EventCategoryController::class, 'index'])->name('events.categories.index');
     Route::get('events/categories/data-select', [EventCategoryController::class, 'dataSelect'])->name('events.categories.data-select');
@@ -47,6 +55,12 @@ Route::middleware('auth')->group(function () {
     Route::post('approvals/user/outstanding-datatable', [UserController::class, 'datatable'])->name('approvals.user.outstanding-datatable');
     Route::post('approvals/user/{key}/approve', [UserController::class, 'approve'])->name('approvals.user.approve');
     Route::post('approvals/user/{key}/reject', [UserController::class, 'reject'])->name('approvals.user.reject');
+
+    Route::get('approvals/event', [ApprovalEventController::class, 'index'])->name('approvals.event.index');
+    Route::post('approvals/event/outstanding-datatable', [ApprovalEventController::class, 'datatable'])->name('approvals.event.outstanding-datatable');
+    Route::get('approvals/event/{key}/show', [ApprovalEventController::class, 'show'])->name('approvals.event.show');
+    Route::post('approvals/event/{key}/approve', [ApprovalEventController::class, 'approve'])->name('approvals.event.approve');
+    Route::post('approvals/event/{key}/reject', [ApprovalEventController::class, 'reject'])->name('approvals.event.reject');
 
     Route::get('setting/permission', [PermissionController::class, 'index'])->name('setting.permission.index');
     Route::post('setting/permission/datatable', [PermissionController::class, 'datatable'])->name('setting.permission.datatable');

@@ -1,41 +1,110 @@
 "use strict";
 
-import handleAjaxError from "../../../tools/handle-ajax-error.js";
 import "./../../../tools/crud-manager.js";
 import { action } from "./action.js";
 
 $(function () {
     window.origin = $('meta[name="url"]').attr('content');
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
+
+    const MAX_LENGTH = 50;
 
     var settings = new $.fn.crudManager.Builder()
-        .setDataTableUrl(`${origin}/approvals/user/outstanding-datatable`)
+        .setDataTableUrl(`${origin}/approvals/event/outstanding-datatable`)
+        .setStoreDataUrl(`${origin}/approvals/event/store`)
+        .setFetchDataUrl(`${origin}/approvals/event/{id}/edit`)
+        .setDeleteDataUrl(`${origin}/approvals/event/{id}/destroy`)
         .setColumns([
-            {
-                data: 'name',
-                name: 'name'
-            },
-            {
-                data: 'email',
-                name: 'email'
-            },
-            {
-                data: 'company',
-                name: 'company'
-            },
             {
                 data: null,
                 render: action,
                 orderable: false,
                 searchable: false
             },
+            {
+                data: 'number',
+                name: 'number'
+            },
+            {
+                data: 'requestor',
+                name: 'requestor'
+            },
+            {
+                data: 'title',
+                name: 'title'
+            },
+            {
+                data: 'category',
+                name: 'category'
+            },
+            {
+                data: 'company',
+                name: 'company'
+            },
+            {
+                data: 'start_date',
+                name: 'start_date'
+            },
+            {
+                data: 'end_date',
+                name: 'end_date'
+            },
+            {
+                data: 'location',
+                name: 'location',
+                className: 'text-wrap',
+                render: function (data, type, row, meta) {
+                    if (type === 'display') {
+                        const shortText = data.length > MAX_LENGTH ? data.substring(0, MAX_LENGTH) + '...' : data;
+                        const isLong = data.length > MAX_LENGTH;
+                        return `
+                        <span class="desc-short">${shortText}</span>
+                        ${isLong ? `<span class="desc-full d-none">${data}</span>
+                        <a href="#" class="toggle-more text-primary ms-1">More</a>` : ''}
+                      `;
+                    }
+                    return data;
+                }
+            },
+            {
+                data: 'created_at',
+                name: 'created_at'
+            },
         ])
         .build();
     $('#datatable').crudManager(settings);
+
+    let expandedRow = null;
+
+    $('#datatable').on('click', '.toggle-more', function (e) {
+        e.preventDefault();
+
+        const $link = $(this);
+        const $cell = $link.closest('td');
+        const $short = $cell.find('.desc-short');
+        const $full = $cell.find('.desc-full');
+
+        if (expandedRow && expandedRow[0] !== $cell[0]) {
+            const $prevLink = expandedRow.find('.toggle-more');
+            const $prevShort = expandedRow.find('.desc-short');
+            const $prevFull = expandedRow.find('.desc-full');
+            $prevFull.addClass('d-none');
+            $prevShort.removeClass('d-none');
+            $prevLink.text('More');
+        }
+
+        const isExpanded = !$full.hasClass('d-none');
+        if (isExpanded) {
+            $full.addClass('d-none');
+            $short.removeClass('d-none');
+            $link.text('More');
+            expandedRow = null;
+        } else {
+            $short.addClass('d-none');
+            $full.removeClass('d-none');
+            $link.text('Less');
+            expandedRow = $cell;
+        }
+    });
 
     $(document).on('click', '#btn-approve', function (e) {
         e.preventDefault();
@@ -44,7 +113,7 @@ $(function () {
         $(button).attr("data-indicator", "on");
         Swal.fire({
             title: 'Please confirm your approval',
-            text: 'Are you sure you want to approve this user?',
+            text: 'Are you sure you want to approve this event?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -54,8 +123,8 @@ $(function () {
                 return new Promise(function (resolve) {
                     $.ajax({
                         type: "POST",
-                        url: `${origin}/approvals/user/${key}/approve`,
-                        dataType: 'JSON',
+                        url: `${origin}/approvals/event/${key}/approve`,
+                        dataType: 'json',
                     })
                         .done(function (response) {
                             Swal.fire(
@@ -63,7 +132,7 @@ $(function () {
                                 response.message,
                                 'success'
                             ).then(function () {
-                                window.location = `${origin}/approvals/user`;
+                                window.location = `${origin}/approvals/event`;
                             });
                         })
                         .fail(function (xhr) {

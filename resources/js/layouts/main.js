@@ -5,8 +5,8 @@
     localStorage.setItem("celayout", "vertical");
     localStorage.setItem("cenavstyles", "icon-hover");
     localStorage.setItem("cemenuscrollable", "fixed");
-    localStorage.setItem("ceMenu", "gradient");
-    localStorage.setItem("primaryRGB", "58, 88, 146");
+    localStorage.setItem("ceMenu", "color");
+    localStorage.setItem("primaryRGB", "206, 126, 90");
 
     if (localStorage.getItem("corporateeventtheme")) {
         document.querySelector("html").setAttribute("data-theme-mode", "dark");

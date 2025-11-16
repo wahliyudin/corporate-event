@@ -1,26 +1,29 @@
 <?php
 
-namespace App\Http\Controllers\Event;
+namespace App\Http\Controllers\Approval;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Event\StoreRequest;
 use App\Services\Event\EventService;
+use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
     public function __construct(
-        private EventService $service
+        public EventService $service
     ) {}
 
     public function index()
     {
-        return view('event.event.index');
+        return view('approval.event.index');
     }
 
     public function datatable()
     {
-        $data = $this->service->datatable();
+        $data = $this->service->outstandingDatatable();
         return datatables()->of($data)
+            ->addColumn('requestor', function ($event) {
+                return $event->requestor->name;
+            })
             ->addColumn('category', function ($event) {
                 return $event->eventCategory->name;
             })
@@ -43,37 +46,32 @@ class EventController extends Controller
             ->make();
     }
 
-    public function store(StoreRequest $request)
+    public function show($key)
+    {
+        $data = $this->service->dataForShow($key);
+        return view('approval.event.show', [
+            'event' => $data,
+        ]);
+    }
+
+    public function approve($key)
     {
         try {
-            $this->service->store($request->validated());
+            $this->service->approve($key);
             return response()->json([
-                'message' => 'Event saved successfully'
+                'message' => 'Event has been approved.',
             ]);
         } catch (\Throwable $th) {
             throw $th;
         }
     }
 
-    public function edit($id)
+    public function reject($key, Request $request)
     {
         try {
-            $data = $this->service->edit($id);
+            $this->service->reject($key, $request->reason);
             return response()->json([
-                'data' => $data
-            ]);
-        } catch (\Throwable $th) {
-            throw $th;
-        }
-    }
-
-    public function destroy($id)
-    {
-        try {
-            $this->service->destroy($id);
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Event successfully deleted!'
+                'message' => 'Event has been rejected.',
             ]);
         } catch (\Throwable $th) {
             throw $th;

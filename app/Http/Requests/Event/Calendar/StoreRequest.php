@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Event;
+namespace App\Http\Requests\Event\Calendar;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -18,6 +18,7 @@ class StoreRequest extends FormRequest
             "title" => "required|string",
             "start_date" => "required",
             "end_date" => "required",
+            "company" => "required",
             "category" => "required",
             "pic" => "required|string",
             "description" => "required|string",

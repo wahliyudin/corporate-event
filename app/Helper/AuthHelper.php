@@ -10,4 +10,9 @@ class AuthHelper
     {
         return auth()->guard($guard)->user();
     }
+
+    public static function hasRole($role)
+    {
+        return self::user()->hasRole($role);
+    }
 }

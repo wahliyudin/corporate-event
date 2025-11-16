@@ -1,10 +1,10 @@
-import errorPlacement from "../../tools/crud-manager/error-placement.js";
-import generateValidationRules from "../../tools/crud-manager/generate-validation-rules.js";
-import handleAjaxError from "../../tools/handle-ajax-error.js";
-import toastMessage from "../../tools/toast/toast-message.js";
-import "../../tools/select2/select2.js";
-import { toastError, toastSuccess, toastWarning } from "../../tools/toast/toast.js";
-import resetForm from "../../tools/crud-manager/reset-form.js";
+import errorPlacement from "../../../tools/crud-manager/error-placement.js";
+import generateValidationRules from "../../../tools/crud-manager/generate-validation-rules.js";
+import handleAjaxError from "../../../tools/handle-ajax-error.js";
+import toastMessage from "../../../tools/toast/toast-message.js";
+import "../../../tools/select2/select2.js";
+import { toastError, toastSuccess, toastWarning } from "../../../tools/toast/toast.js";
+import resetForm from "../../../tools/crud-manager/reset-form.js";
 
 (function () {
     "use strict";
@@ -34,12 +34,6 @@ import resetForm from "../../tools/crud-manager/reset-form.js";
                 method: 'GET',
                 firstOption: '<option selected disabled value="">- Select -</option>'
             },
-        });
-    }
-
-    if ($('#eventForm [name="status"]').length) {
-        $('#eventForm [name="status"]').objSelect2({
-            dropdownParent: $('#eventForm .status-container'),
         });
     }
 
@@ -187,7 +181,7 @@ import resetForm from "../../tools/crud-manager/reset-form.js";
         timeZone: 'Asia/Jakarta',
         events: function (fetchInfo, successCallback, failureCallback) {
             $.ajax({
-                url: '/events/data-calendar',
+                url: '/calendar/data-calendar',
                 type: 'GET',
                 success: function (res) {
                     successCallback(res.map(function (event) {
@@ -306,7 +300,7 @@ import resetForm from "../../tools/crud-manager/reset-form.js";
                             end.subtract(1, "day");
                         }
                         const response = await $.ajax({
-                            url: `${origin}/events/${info.event.id}/move`,
+                            url: `${origin}/calendar/${info.event.id}/move`,
                             method: "POST",
                             data: {
                                 start: start.format('YYYY-MM-DD HH:mm:ss'),
@@ -368,7 +362,7 @@ import resetForm from "../../tools/crud-manager/reset-form.js";
         e.preventDefault();
         const eventId = $('#detailEventId').val();
         $.ajax({
-            url: `${origin}/events/${eventId}/edit`,
+            url: `${origin}/calendar/${eventId}/edit`,
             method: 'GET',
             success: function (response) {
                 $('#modalDetailEvent').modal('hide');
@@ -404,7 +398,7 @@ import resetForm from "../../tools/crud-manager/reset-form.js";
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: `${origin}/events/${eventId}/destroy`,
+                    url: `${origin}/calendar/${eventId}/destroy`,
                     method: 'DELETE',
                     success: function (response) {
                         $('#modalDetailEvent').modal('hide');
@@ -458,7 +452,7 @@ import resetForm from "../../tools/crud-manager/reset-form.js";
         formData.append('description', description?.getData());
         formData.append('location', location?.getData());
         $.ajax({
-            url: `${origin}/events/store`,
+            url: `${origin}/calendar/store`,
             method: 'POST',
             data: formData,
             processData: false,

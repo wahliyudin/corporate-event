@@ -8,15 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class Event extends Model
 {
     protected $fillable = [
+        'number',
         'title',
         'description',
         'location',
         'pic',
-        'status',
         'event_category_id',
         'company_id',
+        'requestor_id',
         'start_date',
         'end_date',
+        'reason',
+        'status',
     ];
 
     protected $casts = [
@@ -33,5 +36,10 @@ class Event extends Model
     public function company()
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function requestor()
+    {
+        return $this->belongsTo(User::class, 'requestor_id');
     }
 }

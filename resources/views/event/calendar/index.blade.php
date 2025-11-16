@@ -218,18 +218,6 @@
                                 <input name="pic" placeholder="PIC / Penanggung Jawab" class="form-control" />
                             </div>
 
-                            <div class="col-md-6 status-container">
-                                <label for="status" class="form-label">Status</label>
-                                <select name="status" class="form-select">
-                                    <option value="" selected disabled>- Select -</option>
-                                    @foreach (App\Enums\Event\Status::cases() as $status)
-                                        <option value="{{ $status->value }}">
-                                            {{ $status->label() }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-
                             <div class="col-12">
                                 <label for="description" class="form-label">Description</label>
                                 <div id="description_toolbar"></div>
@@ -392,5 +380,5 @@
     <script src="{{ asset('assets/libs/fullcalendar/main.min.js') }}"></script>
     <script src="{{ asset('assets/libs/flatpickr/flatpickr.min.js') }}"></script>
     <script src="{{ asset('assets/libs/ckeditor/ckeditor-document.bundle.js') }}"></script>
-    @vite(['resources/js/pages/event/index.js'])
+    @vite(['resources/js/pages/event/calendar/index.js'])
 @endpush

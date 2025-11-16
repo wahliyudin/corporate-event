@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Approval;
 
 use App\Http\Controllers\Controller;
 use App\Services\UserService;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -44,10 +45,10 @@ class UserController extends Controller
         }
     }
 
-    public function reject($key)
+    public function reject($key, Request $request)
     {
         try {
-            $this->service->reject($key);
+            $this->service->reject($key, $request->reason);
             return response()->json([
                 'message' => 'User has been rejected.',
             ]);

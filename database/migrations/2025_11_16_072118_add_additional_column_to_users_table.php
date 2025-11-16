@@ -14,7 +14,8 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->foreignId('company_id')->nullable();
-            $table->string('status')->default(Status::PENDING);
+            $table->string('status')->default(Status::PENDING->value);
+            $table->string('reason')->nullable();
         });
     }
 
@@ -26,6 +27,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('company_id');
             $table->dropColumn('status');
+            $table->dropColumn('reason');
         });
     }
 };

@@ -30,11 +30,12 @@ class UserService
         ]);
     }
 
-    public function reject($key)
+    public function reject($key, $reason)
     {
         $user = $this->repository->findOrFail($key);
         return $user->update([
             'status' => Status::REJECTED,
+            'reason' => $reason,
         ]);
     }
 }
