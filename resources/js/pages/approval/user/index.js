@@ -37,6 +37,17 @@ $(function () {
         .build();
     $('#datatable').crudManager(settings);
 
+    function getUrlParam(param) {
+        const url = new URL(window.location.href);
+        return url.searchParams.get(param);
+    }
+
+    var keyword = getUrlParam('search');
+
+    if (keyword) {
+        $('#datatable').data('dataTableInstance').search(keyword).draw();
+    }
+
     $(document).on('click', '#btn-approve', function (e) {
         e.preventDefault();
         var button = this;

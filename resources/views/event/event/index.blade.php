@@ -42,6 +42,7 @@
                                     <th>Company</th>
                                     <th>Start Date</th>
                                     <th>End Date</th>
+                                    <th>Status</th>
                                     <th style="min-width: 27rem;">Location</th>
                                     <th>Created At</th>
                                 </tr>

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Jobs\Auth;
+namespace App\Jobs\Event;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Mail;
 
-class VerifyRegistrationJob implements ShouldQueue
+class VerifyEventJob implements ShouldQueue
 {
     use Queueable;
 
@@ -16,8 +16,9 @@ class VerifyRegistrationJob implements ShouldQueue
     public function __construct(
         public string $toEmail,
         public string $toName,
-        public string $userName,
-        public string $userEmail,
+        public string $eventId,
+        public string $eventName,
+        public string $eventTitle,
     ) {}
 
     /**
@@ -26,16 +27,15 @@ class VerifyRegistrationJob implements ShouldQueue
     public function handle(): void
     {
         $data = [
-            "title" => "Verify Registration",
+            "title" => "Verify Event",
             "toEmail" => $this->toEmail,
             "toName" => $this->toName,
-            "userName" => $this->userName,
-            "userEmail" => $this->userEmail,
-            "url" => route('approvals.user.index', [
-                'search' => $this->userEmail,
-            ]),
+            "eventId" => $this->eventId,
+            "eventName" => $this->eventName,
+            "eventTitle" => $this->eventTitle,
+            "url" => route('approvals.event.show', $this->eventId),
         ];
-        Mail::send('emails.auth.verify-registration', $data, function ($message) use ($data) {
+        Mail::send('emails.event.verify', $data, function ($message) use ($data) {
             $message->to($data["toEmail"])
                 ->subject($data["title"]);
         });

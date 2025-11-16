@@ -4,12 +4,18 @@ namespace App\Services\Event;
 
 use App\Enums\Event\Status;
 use App\Helper\AuthHelper;
+use App\Jobs\Event\VerifyEventJob;
 use App\Models\Event;
+use App\Repositories\UserRepository;
 use App\Tools\CodeGenerator;
 use Illuminate\Support\Facades\DB;
 
 class EventService
 {
+    public function __construct(
+        private UserRepository $userRepository
+    ) {}
+
     public function datatable()
     {
         return Event::query()
@@ -123,9 +129,22 @@ class EventService
             if (!$data['id']) {
                 $payload['number'] = CodeGenerator::generateCodeBySequence();
             }
-            return Event::query()->updateOrCreate([
+            $event = Event::query()->updateOrCreate([
                 'id' => $data['id']
             ], $payload);
+
+            $admins = $this->userRepository->getAdmins();
+            foreach ($admins as $admin) {
+                dispatch(new VerifyEventJob(
+                    $admin->email,
+                    $admin->name,
+                    $event->id,
+                    $event->number,
+                    $event->title,
+                ));
+            }
+
+            return $event;
         });
     }
 

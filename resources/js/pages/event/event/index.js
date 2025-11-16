@@ -117,6 +117,10 @@ $(function () {
                 name: 'end_date'
             },
             {
+                data: 'status',
+                name: 'status'
+            },
+            {
                 data: 'location',
                 name: 'location',
                 className: 'text-wrap',

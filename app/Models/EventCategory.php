@@ -11,6 +11,11 @@ class EventCategory extends Model
         'color',
     ];
 
+    public function badge()
+    {
+        return "<span class='badge' style='background-color: " . $this->color . "'>" . $this->name . "</span>";
+    }
+
     public function hasUsed()
     {
         return $this->hasMany(Event::class)
