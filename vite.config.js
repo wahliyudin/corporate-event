@@ -25,6 +25,8 @@ export default defineConfig({
 
                 'resources/js/pages/event/index.js',
 
+                'resources/js/pages/approval/user/index.js',
+
                 'resources/js/pages/setting/permission/index.js',
                 'resources/js/pages/setting/permission/edit.js',
             ],

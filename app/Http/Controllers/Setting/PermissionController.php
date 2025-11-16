@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Setting;
 
+use App\Enums\User\Status;
 use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Models\User;
@@ -23,7 +24,23 @@ class PermissionController extends Controller
     public function datatable()
     {
         $data = $this->permissionService->datatable();
-        return datatables()->of($data)
+        return datatables()->eloquent($data)
+            ->addColumn('company', function ($user) {
+                return $user->company?->name;
+            })
+            ->filterColumn('company', function ($query, $keyword) {
+                $query->whereHas('company', function ($query) use ($keyword) {
+                    $query->where('name', 'like', "%{$keyword}%");
+                });
+            })
+            ->editColumn('status', function ($user) {
+                return $user->status->badge();
+            })
+            ->addColumn('can_setting', function ($user) {
+                return $user->status === Status::VERIFIED;
+            })
+            ->rawColumns(['status'])
+            ->addIndexColumn()
             ->make();
     }
 

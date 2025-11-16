@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\User\Status;
 use App\Http\Controllers\Controller;
+use App\Repositories\UserRepository;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
@@ -32,9 +36,30 @@ class LoginController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct(
+        public UserRepository $repository
+    ) {
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
+    }
+
+    protected function validateLogin(Request $request)
+    {
+        $request->validate([
+            $this->username() => 'required|string',
+            'password' => 'required|string',
+        ]);
+
+        $user = $this->repository->find($request->input($this->username()));
+        if ($user && $user->status == Status::REJECTED) {
+            throw ValidationException::withMessages([
+                'Your account has been <span class="text-danger">rejected</span> by the administrator.'
+            ]);
+        }
+        if ($user && $user->status == Status::PENDING) {
+            throw ValidationException::withMessages([
+                'Your account is <span class="text-warning">pending</span> approval by the administrator.'
+            ]);
+        }
     }
 }

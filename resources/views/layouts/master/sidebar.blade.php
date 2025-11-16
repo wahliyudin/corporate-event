@@ -58,7 +58,7 @@
                                 <a href="" class="side-menu__item">Event</a>
                             </li>
                             <li class="slide">
-                                <a href="" class="side-menu__item">User</a>
+                                <a href="{{ route('approvals.user.index') }}" class="side-menu__item">User</a>
                             </li>
                         </ul>
                     </li>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Approval\UserController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\Event\EventCategoryController;
 use App\Http\Controllers\Event\EventController;
@@ -41,6 +42,11 @@ Route::middleware('auth')->group(function () {
     Route::post('companies/store', [CompanyController::class, 'store'])->name('companies.store');
     Route::get('companies/{key}/edit', [CompanyController::class, 'edit'])->name('companies.edit');
     Route::delete('companies/{key}/destroy', [CompanyController::class, 'destroy'])->name('companies.destroy');
+
+    Route::get('approvals/user', [UserController::class, 'index'])->name('approvals.user.index');
+    Route::post('approvals/user/outstanding-datatable', [UserController::class, 'datatable'])->name('approvals.user.outstanding-datatable');
+    Route::post('approvals/user/{key}/approve', [UserController::class, 'approve'])->name('approvals.user.approve');
+    Route::post('approvals/user/{key}/reject', [UserController::class, 'reject'])->name('approvals.user.reject');
 
     Route::get('setting/permission', [PermissionController::class, 'index'])->name('setting.permission.index');
     Route::post('setting/permission/datatable', [PermissionController::class, 'datatable'])->name('setting.permission.datatable');
