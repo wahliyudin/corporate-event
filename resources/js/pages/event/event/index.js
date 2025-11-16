@@ -101,6 +101,10 @@ $(function () {
                 name: 'title'
             },
             {
+                data: 'requestor',
+                name: 'requestor'
+            },
+            {
                 data: 'category',
                 name: 'category'
             },

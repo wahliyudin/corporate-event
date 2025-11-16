@@ -20,10 +20,10 @@ class UserService
     {
         $user = $this->repository->findOrFail($key);
         $user->syncPermissions([
-            'event.read',
-            'event.create',
-            'event.update',
-            'event.delete',
+            'event_read',
+            'event_create',
+            'event_update',
+            'event_delete',
         ]);
         return $user->update([
             'status' => Status::VERIFIED,

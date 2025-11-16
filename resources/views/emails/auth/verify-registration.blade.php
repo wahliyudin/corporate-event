@@ -12,7 +12,10 @@
         </span>
     </div>
     <div class="body">
-        User {{ $userName . ' ' . $userEmail }} Need to be verified by you, Please click link this to detail <br>
+        User, <br>
+        Name : {{ $userName }} <br>
+        Email : {{ $userEmail }} <br>
+        Need to be verified by you, Please click link this to detail <br>
         <a href="{{ $url }}">Detail</a>
     </div><br>
 

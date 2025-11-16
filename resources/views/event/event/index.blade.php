@@ -38,6 +38,7 @@
                                     <th style="max-width: 5rem;">Actions</th>
                                     <th>Number</th>
                                     <th>Title</th>
+                                    <th>Requestor</th>
                                     <th>Category</th>
                                     <th>Company</th>
                                     <th>Start Date</th>

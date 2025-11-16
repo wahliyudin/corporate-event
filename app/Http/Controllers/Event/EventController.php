@@ -30,6 +30,14 @@ class EventController extends Controller
                     $query->where('name', 'like', "%{$keyword}%");
                 });
             })
+            ->addColumn('requestor', function ($event) {
+                return $event->requestor->name;
+            })
+            ->filterColumn('requestor', function ($query, $keyword) {
+                $query->whereHas('requestor', function ($query) use ($keyword) {
+                    $query->where('name', 'like', "%{$keyword}%");
+                });
+            })
             ->addColumn('company', function ($event) {
                 return $event->company->name;
             })

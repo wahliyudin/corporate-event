@@ -22,6 +22,7 @@ class EventService
             ->with([
                 'eventCategory',
                 'company',
+                'requestor',
             ])
             ->select([
                 'id',
@@ -33,6 +34,7 @@ class EventService
                 'status',
                 'event_category_id',
                 'company_id',
+                'requestor_id',
                 'start_date',
                 'end_date',
                 'created_at',
