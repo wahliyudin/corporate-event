@@ -1,6 +1,7 @@
 "use strict";
 
 import handleAjaxError from "../../tools/handle-ajax-error";
+import "./../../tools/select2/select2";
 import { toastSuccess } from "../../tools/toast/toast";
 
 $(function () {
@@ -10,6 +11,17 @@ $(function () {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    if ($('#formRegister [name="company"]').length) {
+        $('#formRegister [name="company"]').objSelect2({
+            dropdownParent: $('#formRegister .company-container'),
+            api: {
+                url: `${origin}/companies/data-select`,
+                method: 'GET',
+                firstOption: '<option selected disabled value="">- Select -</option>'
+            },
+        });
+    }
 
     $(document).on('click', '#formRegister #btnSubmit', function (e) {
         e.preventDefault();

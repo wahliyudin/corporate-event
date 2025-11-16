@@ -9,7 +9,7 @@
                 <div class="row gy-3">
                     <div class="col-xl-12">
                         <label for="email" class="form-label text-default">Email</label>
-                        <input type="email" name="email" value="admin@admin.com" class="form-control form-control-lg"
+                        <input type="email" name="email" value="admin@gmail.com" class="form-control form-control-lg"
                             id="email" autocomplete="email" autofocus>
                     </div>
                     <div class="col-xl-12 mb-2">

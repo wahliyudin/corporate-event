@@ -30,7 +30,7 @@ import resetForm from "../../tools/crud-manager/reset-form.js";
         $('#eventForm [name="category"]').objSelect2({
             dropdownParent: $('#eventForm .category-container'),
             api: {
-                url: `${origin}/events/category/data-select`,
+                url: `${origin}/events/categories/data-select`,
                 method: 'GET',
                 firstOption: '<option selected disabled value="">- Select -</option>'
             },
@@ -148,7 +148,7 @@ import resetForm from "../../tools/crud-manager/reset-form.js";
         `;
         $('#event-categories').html(loader);
         $.ajax({
-            url: `${origin}/events/category/data-select`,
+            url: `${origin}/events/categories/data-select`,
             type: 'GET',
             success: function (res) {
                 $('#event-categories').html(res.data.map(itemCategory).join(''));

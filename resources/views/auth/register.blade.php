@@ -10,19 +10,23 @@
                 <div class="row gy-3">
                     <div class="col-xl-12">
                         <label for="name" class="form-label text-default">Name</label>
-                        <input id="name" type="text" value="User" class="form-control form-control-lg"
-                            name="name" required autocomplete="name" autofocus>
+                        <input id="name" type="text" value="User" class="form-control" name="name" required
+                            autocomplete="name" autofocus>
                     </div>
                     <div class="col-xl-12">
                         <label for="email" class="form-label text-default">Email</label>
-                        <input id="email" type="email" value="user@gmail.com" class="form-control form-control-lg"
-                            name="email" required autocomplete="email">
+                        <input id="email" type="email" value="user@gmail.com" class="form-control" name="email"
+                            required autocomplete="email">
+                    </div>
+                    <div class="col-xl-12 company-container">
+                        <label for="company" class="form-label text-default">Company</label>
+                        <select name="company" class="form-select"></select>
                     </div>
                     <div class="col-xl-12">
                         <label for="password" class="form-label text-default">Password</label>
                         <div class="input-group">
-                            <input id="password" type="password" value="1234567890" class="form-control form-control-lg"
-                                name="password" required autocomplete="new-password">
+                            <input id="password" type="password" value="1234567890" class="form-control" name="password"
+                                required autocomplete="new-password">
                             <button class="btn btn-light" type="button" onclick="createpassword('password',this)"
                                 id="button-addon2"><i class="ri-eye-off-line align-middle"></i></button>
                         </div>
@@ -30,15 +34,14 @@
                     <div class="col-xl-12">
                         <label for="password-confirm" class="form-label text-default">Confirm Password</label>
                         <div class="input-group">
-                            <input id="password-confirm" type="password" value="1234567890"
-                                class="form-control form-control-lg" name="password_confirmation" required
-                                autocomplete="new-password">
+                            <input id="password-confirm" type="password" value="1234567890" class="form-control"
+                                name="password_confirmation" required autocomplete="new-password">
                             <button class="btn btn-light" type="button" onclick="createpassword('password-confirm',this)"
                                 id="button-addon2"><i class="ri-eye-off-line align-middle"></i></button>
                         </div>
                     </div>
                     <div class="col-xl-12 d-grid mt-2">
-                        <button type="button" id="btnSubmit" class="btn btn-lg btn-primary">
+                        <button type="button" id="btnSubmit" class="btn btn-primary">
                             <span class="indicator-label">
                                 <div class="d-flex align-items-center justify-content-center gap-2">
                                     <span>Sign Up</span>
@@ -63,6 +66,11 @@
     </div>
 @endsection
 
+@push('css')
+    <link rel="stylesheet" href="{{ asset('assets/libs/select2/select2.min.css') }}">
+@endpush
+
 @push('js')
+    <script src="{{ asset('assets/libs/select2/select2.min.js') }}"></script>
     @vite(['resources/js/pages/auth/register.js'])
 @endpush

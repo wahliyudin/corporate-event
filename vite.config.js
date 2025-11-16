@@ -21,8 +21,12 @@ export default defineConfig({
                 'resources/js/pages/auth/confirm.js',
 
                 'resources/js/pages/company/index.js',
+                'resources/js/pages/event/categories/index.js',
 
                 'resources/js/pages/event/index.js',
+
+                'resources/js/pages/setting/permission/index.js',
+                'resources/js/pages/setting/permission/edit.js',
             ],
             refresh: true,
         }),

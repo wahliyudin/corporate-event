@@ -10,4 +10,10 @@ class EventCategory extends Model
         'name',
         'color',
     ];
+
+    public function hasUsed()
+    {
+        return $this->hasMany(Event::class)
+            ->exists();
+    }
 }
