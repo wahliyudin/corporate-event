@@ -41,7 +41,7 @@ class AppServiceProvider extends ServiceProvider
             $hasDelete = hasPermission("{$prefix}_reject") ? 'true' : 'false';
             return $this->addSelect(DB::raw("{$hasDelete} as can_reject"));
         });
-        Builder::macro('addCanUpdateAndIsDelete', function ($prefix) {
+        Builder::macro('addCanUpdateAndCanDelete', function ($prefix) {
             /** @var Builder $this */
             return $this->addCanUpdate($prefix)
                 ->addCanDelete($prefix);

@@ -71,8 +71,7 @@
                                 <label for="color" class="form-label">Color</label>
 
                                 <div class="d-flex align-items-center gap-2 w-100">
-                                    <input type="text" required class="form-control" name="color" id="color"
-                                        readonly>
+                                    <input type="text" required class="form-control" name="color" id="color">
                                     <div class="theme-container1"></div>
                                     <div class="pickr-container1 example-picker"></div>
                                 </div>

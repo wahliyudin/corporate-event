@@ -32,12 +32,6 @@ class EventCategoryController extends Controller
             ->editColumn('color', function ($category) {
                 return $category->badge($category->color, 'badge-lg');
             })
-            ->addColumn('can_update', function ($category) {
-                return true;
-            })
-            ->addColumn('can_delete', function ($category) {
-                return true;
-            })
             ->rawColumns(['color'])
             ->addIndexColumn()
             ->make();

@@ -39,7 +39,7 @@ class EventService
                 'end_date',
                 'created_at',
             ])
-            ->addCanUpdateAndIsDelete('event')
+            ->addCanUpdateAndCanDelete('event')
             ->when(!AuthHelper::hasRole('administrator'), function ($query) {
                 $query->where('company_id', AuthHelper::user()->company_id);
             })

@@ -16,9 +16,16 @@ class StoreRequest extends FormRequest
         $rules = [
             'id' => 'nullable',
             'name' => 'required',
-            'color' => 'required',
+            'color' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
         ];
 
         return $rules;
+    }
+
+    public function messages()
+    {
+        return [
+            'color.regex' => 'The color must be a valid color code. e.g. #FF0000',
+        ];
     }
 }

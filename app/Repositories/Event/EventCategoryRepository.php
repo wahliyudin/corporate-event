@@ -16,6 +16,7 @@ class EventCategoryRepository
     {
         return EventCategory::query()
             ->select(['id', 'name', 'color'])
+            ->addCanUpdateAndCanDelete('event_category')
             ->get();
     }
 
