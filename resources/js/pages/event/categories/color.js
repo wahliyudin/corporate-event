@@ -1,12 +1,8 @@
 (function () {
     "use strict";
 
-    const pickrContainer = document.querySelector('.pickr-container');
-    const themeContainer = document.querySelector('.theme-container');
     const pickrContainer1 = document.querySelector('.pickr-container1');
     const themeContainer1 = document.querySelector('.theme-container1');
-    const pickrContainer2 = document.querySelector('.pickr-container2');
-    const themeContainer2 = document.querySelector('.theme-container2');
 
 
     /* monolith */
@@ -84,7 +80,8 @@
             }).on('clear', instance => {
                 // console.log('Event: "clear"', instance);
             }).on('change', (color, source, instance) => {
-                // console.log('Event: "change"', color, source, instance);
+                const colorInput = document.getElementById('color');
+                colorInput.value = color.toHEXA().toString(0);
             }).on('changestop', (source, instance) => {
                 // console.log('Event: "changestop"', source, instance);
             }).on('cancel', instance => {

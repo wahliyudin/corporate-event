@@ -29,12 +29,16 @@ class EventCategoryController extends Controller
     {
         $data = $this->service->datatable();
         return datatables()->of($data)
-            ->addColumn('can_update', function ($company) {
+            ->editColumn('color', function ($category) {
+                return $category->badge($category->color, 'badge-lg');
+            })
+            ->addColumn('can_update', function ($category) {
                 return true;
             })
-            ->addColumn('can_delete', function ($company) {
+            ->addColumn('can_delete', function ($category) {
                 return true;
             })
+            ->rawColumns(['color'])
             ->addIndexColumn()
             ->make();
     }

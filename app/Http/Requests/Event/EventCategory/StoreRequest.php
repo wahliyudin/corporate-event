@@ -16,6 +16,7 @@ class StoreRequest extends FormRequest
         $rules = [
             'id' => 'nullable',
             'name' => 'required',
+            'color' => 'required',
         ];
 
         return $rules;

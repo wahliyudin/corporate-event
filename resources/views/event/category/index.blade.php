@@ -68,13 +68,14 @@
                                 <input type="text" required class="form-control" id="name" name="name">
                             </div>
                             <div class="col-12">
-                                <label for="name" class="form-label">Name</label>
-                                <input type="color" name="color" class="form-control form-control-color border-0"
-                                    value="#136ad0" title="Choose your color">
-                            </div>
-                            <div>
-                                <div class="theme-container1"></div>
-                                <div class="pickr-container1 example-picker"></div>
+                                <label for="color" class="form-label">Color</label>
+
+                                <div class="d-flex align-items-center gap-2 w-100">
+                                    <input type="text" required class="form-control" name="color" id="color"
+                                        readonly>
+                                    <div class="theme-container1"></div>
+                                    <div class="pickr-container1 example-picker"></div>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -106,6 +107,12 @@
     <link rel="stylesheet" href="{{ asset('assets/libs/@simonwep/pickr/themes/classic.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/@simonwep/pickr/themes/monolith.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/@simonwep/pickr/themes/nano.min.css') }}">
+    <style>
+        .pickr .pcr-button {
+            width: 2.3rem;
+            height: 2.3rem;
+        }
+    </style>
 @endpush
 
 @push('js')
