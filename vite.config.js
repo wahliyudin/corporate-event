@@ -25,7 +25,7 @@ export default defineConfig({
 
                 'resources/js/pages/event/event/index.js',
 
-                'resources/js/pages/calendar/index.js',
+                'resources/js/pages/event/calendar/index.js',
 
                 'resources/js/pages/approval/user/index.js',
                 'resources/js/pages/approval/event/index.js',
