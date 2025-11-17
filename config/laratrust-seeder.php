@@ -15,6 +15,10 @@ return [
             'permissions' => 'c,r,u,d',
         ],
         [
+            'title' => 'Event Category',
+            'permissions' => 'c,r,u,d',
+        ],
+        [
             'title' => 'Settings',
             'child' => [
                 [

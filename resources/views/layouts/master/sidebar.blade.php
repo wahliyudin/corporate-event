@@ -1,12 +1,12 @@
 <aside class="app-sidebar sticky" id="sidebar">
     <div class="main-sidebar-header">
         <a href="" class="header-logo">
-            <img src="{{ asset('assets/images/brand-logos/desktop-logo.png') }}" alt="logo" class="desktop-logo">
-            <img src="{{ asset('assets/images/brand-logos/toggle-logo.png') }}" alt="logo" class="toggle-logo">
-            <img src="{{ asset('assets/images/brand-logos/desktop-dark.png') }}" alt="logo" class="desktop-dark">
-            <img src="{{ asset('assets/images/brand-logos/toggle-dark.png') }}" alt="logo" class="toggle-dark">
-            <img src="{{ asset('assets/images/brand-logos/desktop-white.png') }}" alt="logo" class="desktop-white">
-            <img src="{{ asset('assets/images/brand-logos/toggle-white.png') }}" alt="logo" class="toggle-white">
+            <img src="{{ asset('assets/images/rmh.png') }}" alt="logo" class="desktop-logo">
+            <img src="{{ asset('assets/images/rmh-crop.png') }}" alt="logo" class="toggle-logo">
+            <img src="{{ asset('assets/images/rmh.png') }}" alt="logo" class="desktop-dark">
+            <img src="{{ asset('assets/images/rmh-crop.png') }}" alt="logo" class="toggle-dark">
+            <img src="{{ asset('assets/images/rmh.png') }}" alt="logo" class="desktop-white">
+            <img src="{{ asset('assets/images/rmh-crop.png') }}" alt="logo" class="toggle-white">
         </a>
     </div>
     <div class="main-sidebar" id="sidebar-scroll">
@@ -45,6 +45,14 @@
                         <a href="{{ route('companies.index') }}" class="side-menu__item">
                             <i class="bx bx-building side-menu__icon"></i>
                             <span class="side-menu__label">Companies</span>
+                        </a>
+                    </li>
+                @endpermission
+                @permission('event_category_read')
+                    <li class="slide">
+                        <a href="{{ route('events.categories.index') }}" class="side-menu__item">
+                            <i class="bx bx-list-ul side-menu__icon"></i>
+                            <span class="side-menu__label">Event Category</span>
                         </a>
                     </li>
                 @endpermission
