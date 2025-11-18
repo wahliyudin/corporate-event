@@ -5,6 +5,7 @@ import toastMessage from "../../../tools/toast/toast-message.js";
 import "../../../tools/select2/select2.js";
 import { toastError, toastSuccess, toastWarning } from "../../../tools/toast/toast.js";
 import resetForm from "../../../tools/crud-manager/reset-form.js";
+import "./latest-activity.js";
 
 (function () {
     "use strict";
@@ -123,7 +124,6 @@ import resetForm from "../../../tools/crud-manager/reset-form.js";
             });
     }
 
-    loadEventCategories();
 
     function loadEventCategories() {
         const itemCategory = function (category) {
@@ -140,12 +140,21 @@ import resetForm from "../../../tools/crud-manager/reset-form.js";
                 </div>
             </div>
         `;
+        const empty = `
+            <div class="alert alert-info">
+                <p class="mb-0">No categories found.</p>
+            </div>
+        `;
         $('#event-categories').html(loader);
         $.ajax({
             url: `${origin}/events/categories/data-select`,
             type: 'GET',
             success: function (res) {
-                $('#event-categories').html(res.data.map(itemCategory).join(''));
+                if (res.data.length > 0) {
+                    $('#event-categories').html(res.data.map(itemCategory).join(''));
+                } else {
+                    $('#event-categories').html(empty);
+                }
             },
             error: function (err) {
                 $('#event-categories').html(`
@@ -157,6 +166,8 @@ import resetForm from "../../../tools/crud-manager/reset-form.js";
             }
         });
     }
+
+    loadEventCategories();
 
     let receiveEvent = null;
     var containerEl = document.getElementById('event-categories');
@@ -326,7 +337,7 @@ import resetForm from "../../../tools/crud-manager/reset-form.js";
                 }
                 if (result.isConfirmed) {
                     toastSuccess('Event successfully moved!');
-                    calendar.refetchEvents();
+                    reloadAllApi();
                 }
             });
         },
@@ -339,6 +350,14 @@ import resetForm from "../../../tools/crud-manager/reset-form.js";
         },
     });
     calendar.render();
+
+    function reloadAllApi() {
+        $(document).trigger('reload-all-api');
+    }
+
+    $(document).on('reload-all-api', function () {
+        calendar.refetchEvents();
+    });
 
     function setDetailEvent(event) {
         $('#detailEventId').val(event.id);
@@ -402,7 +421,7 @@ import resetForm from "../../../tools/crud-manager/reset-form.js";
                     method: 'DELETE',
                     success: function (response) {
                         $('#modalDetailEvent').modal('hide');
-                        calendar.refetchEvents();
+                        reloadAllApi();
                         toastSuccess('Event successfully deleted!');
                     },
                     error: function (xhr, status, error) {
@@ -425,6 +444,9 @@ import resetForm from "../../../tools/crud-manager/reset-form.js";
     $('#modalFormEvent').on('hidden.bs.modal', function () {
         receiveEvent?.remove();
         receiveEvent = null;
+        resetForm('#eventForm');
+        location.setData('');
+        description.setData('');
     });
 
 
@@ -461,7 +483,7 @@ import resetForm from "../../../tools/crud-manager/reset-form.js";
                 toastMessage('success', response.message);
                 description?.setData('');
                 location?.setData('');
-                calendar.refetchEvents();
+                reloadAllApi();
                 resetForm('#eventForm');
                 receiveEvent?.remove();
                 receiveEvent = null;

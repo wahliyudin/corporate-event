@@ -81,7 +81,7 @@ class EventService
                 'eventCategory',
                 'company',
             ])
-            ->where('status', Status::VERIFIED->value)
+            ->whereNotIn('status', [Status::PENDING, Status::REJECTED])
             ->get()
             ->map(function ($event) {
                 return [
@@ -154,9 +154,7 @@ class EventService
     {
         return DB::transaction(function () use ($data) {
             $user = AuthHelper::user();
-            return Event::query()->updateOrCreate([
-                'id' => $data['id']
-            ], [
+            $payload = [
                 'title' => $data['title'],
                 'description' => $data['description'],
                 'location' => $data['location'],
@@ -167,7 +165,13 @@ class EventService
                 'status' => Status::VERIFIED->value,
                 'start_date' => $data['start_date'],
                 'end_date' => $data['end_date'],
-            ]);
+            ];
+            if (!$data['id']) {
+                $payload['number'] = CodeGenerator::generateCodeBySequence();
+            }
+            return Event::query()->updateOrCreate([
+                'id' => $data['id']
+            ], $payload);
         });
     }
 
@@ -238,5 +242,57 @@ class EventService
             'status' => Status::REJECTED->value,
             'reason' => $reason,
         ]);
+    }
+
+    public function latestActivity()
+    {
+        return Event::query()
+            ->select([
+                'id',
+                'number',
+                'title',
+                'description',
+                'location',
+                'pic',
+                'status',
+                'event_category_id',
+                'company_id',
+                'requestor_id',
+                'start_date',
+                'end_date',
+                'created_at',
+            ])
+            ->whereIn('status', [Status::VERIFIED, Status::COMPLETED])
+            ->latest('end_date')
+            ->limit(5)
+            ->get()
+            ->map(function ($event) {
+                return [
+                    'title' => $event->title,
+                    'status' => $event->status,
+                    'date' => $this->extractEventDateTimeInfo($event),
+                    'has_due_date' => $event->end_date->isPast() && $event->status !== Status::COMPLETED,
+                ];
+            });
+    }
+
+    public function extractEventDateTimeInfo($event)
+    {
+        $start = \Carbon\Carbon::parse($event->start_date);
+        $end   = \Carbon\Carbon::parse($event->end_date);
+
+        // Jika pada hari yang sama
+        if ($start->isSameDay($end)) {
+            return [
+                'date' => $start->format('l, M j, Y'),
+                'time' => $start->format('g:iA') . ' - ' . $end->format('g:iA')
+            ];
+        }
+
+        // Jika beda hari
+        return [
+            'date' => $start->format('l, M j, Y') . ' - ' . $end->format('l, M j, Y'),
+            'time' => $start->format('g:iA') . ' - ' . $end->format('g:iA')
+        ];
     }
 }

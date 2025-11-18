@@ -22,7 +22,7 @@
                         </div>
                     </div>
                     <div class="p-3 border-bottom" id="full-calendar-activity">
-                        <ul class="list-unstyled mb-0 fullcalendar-events-activity">
+                        <ul class="list-unstyled mb-0 fullcalendar-events-activity" id="latest-activities">
                             <li>
                                 <div class="d-flex align-items-center justify-content-between flex-wrap">
                                     <p class="mb-1 fw-semibold">

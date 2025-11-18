@@ -24,7 +24,7 @@ $(function () {
                         '|',
                         'bold', 'italic', 'strikethrough',
                         '|',
-                        'blockQuote', 'codeBlock',
+                        'blockQuote',
                         '|',
                         'bulletedList', 'numberedList', 'outdent', 'indent'
                     ],
@@ -56,7 +56,7 @@ $(function () {
                         '|',
                         'bold', 'italic', 'strikethrough',
                         '|',
-                        'blockQuote', 'codeBlock',
+                        'blockQuote',
                         '|',
                         'bulletedList', 'numberedList', 'outdent', 'indent'
                     ],

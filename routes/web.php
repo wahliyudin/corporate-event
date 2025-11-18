@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::post('events/store', [EventController::class, 'store'])->name('events.store');
     Route::get('events/{id}/edit', [EventController::class, 'edit'])->name('events.edit');
     Route::delete('events/{id}/destroy', [EventController::class, 'destroy'])->name('events.destroy');
+    Route::get('events/latest-activity', [EventController::class, 'latestActivity'])->name('events.latest-activity');
 
     Route::get('calendar', [CalendarController::class, 'index'])->name('calendar.index')->middleware('permission:calendar_read');
     Route::get('calendar/data-calendar', [CalendarController::class, 'dataCalendar'])->name('calendar.data-calendar');

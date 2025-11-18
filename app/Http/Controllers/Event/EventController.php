@@ -108,4 +108,12 @@ class EventController extends Controller
             throw $th;
         }
     }
+
+    public function latestActivity()
+    {
+        $data = $this->service->latestActivity();
+        return response()->json([
+            'data' => $data
+        ]);
+    }
 }

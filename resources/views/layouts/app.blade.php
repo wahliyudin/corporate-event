@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="{{ asset('assets/libs/flatpickr/flatpickr.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/@simonwep/pickr/themes/nano.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/choices.js/public/assets/styles/choices.min.css') }}">
-    @vite(['resources/css/custom.css', 'resources/js/layouts/main.js', 'resources/js/layouts/custom-switcher.js', 'resources/js/layouts/default-menu.js'])
+    @vite(['resources/css/custom.css', 'resources/js/layouts/main.js', 'resources/js/layouts/default-menu.js'])
     @stack('css')
 </head>
 
@@ -53,7 +53,7 @@
     <script src="{{ asset('assets/js/simplebar.js') }}"></script>
     <script src="{{ asset('assets/libs/@simonwep/pickr/pickr.es5.min.js') }}"></script>
     <script src="{{ asset('assets/js/custom.js') }}"></script>
-    <script>
+    {{-- <script>
         document.addEventListener("DOMContentLoaded", function() {
             const toggleBtn = document.querySelector(".sidemenu-toggle");
 
@@ -61,7 +61,7 @@
                 toggleBtn.click();
             }
         });
-    </script>
+    </script> --}}
     @stack('js')
 </body>
 
