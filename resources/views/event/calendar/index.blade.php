@@ -18,72 +18,14 @@
                             <h6 class="fw-semibold">
                                 Activity :
                             </h6>
-                            <button class="btn btn-primary-light btn-sm btn-wave">View All</button>
+                            <a href="{{ route('events.upcoming') }}" class="btn btn-primary-light btn-sm btn-wave">View
+                                All</a>
                         </div>
                     </div>
                     <div class="p-3 border-bottom" id="full-calendar-activity">
                         <ul class="list-unstyled mb-0 fullcalendar-events-activity" id="latest-activities">
-                            <li>
-                                <div class="d-flex align-items-center justify-content-between flex-wrap">
-                                    <p class="mb-1 fw-semibold">
-                                        Monday, Jan 1,2023
-                                    </p>
-                                    <span class="badge bg-light text-default mb-1">12:00PM - 1:00PM</span>
-                                </div>
-                                <p class="mb-0 text-muted fs-12">
-                                    Meeting with a client about new project requirement.
-                                </p>
-                            </li>
-                            <li>
-                                <div class="d-flex align-items-center justify-content-between flex-wrap">
-                                    <p class="mb-1 fw-semibold">
-                                        Thursday, Dec 29,2022
-                                    </p>
-                                    <span class="badge bg-success mb-1">Completed</span>
-                                </div>
-                                <p class="mb-0 text-muted fs-12">
-                                    Birthday party of niha suka
-                                </p>
-                            </li>
-                            <li>
-                                <div class="d-flex align-items-center justify-content-between flex-wrap">
-                                    <p class="mb-1 fw-semibold">
-                                        Wednesday, Jan 3,2023
-                                    </p>
-                                    <span class="badge bg-warning-transparent mb-1">Reminder</span>
-                                </div>
-                                <p class="mb-0 text-muted fs-12">
-                                    WOrk taget for new project is completing
-                                </p>
-                            </li>
-                            <li>
-                                <div class="d-flex align-items-center justify-content-between flex-wrap">
-                                    <p class="mb-1 fw-semibold">
-                                        Friday, Jan 20,2023
-                                    </p>
-                                    <span class="badge bg-light text-default mb-1">06:00PM -
-                                        09:00PM</span>
-                                </div>
-                                <p class="mb-0 text-muted fs-12">
-                                    Watch new movie with family
-                                </p>
-                            </li>
-                            <li>
-                                <div class="d-flex align-items-center justify-content-between flex-wrap">
-                                    <p class="mb-1 fw-semibold">
-                                        Saturday, Jan 07,2023
-                                    </p>
-                                    <span class="badge bg-danger-transparent mb-1">Due Date</span>
-                                </div>
-                                <p class="mb-0 text-muted fs-12">
-                                    Last day to pay the electricity bill and water bill.need to check the
-                                    bank details.
-                                </p>
-                            </li>
+
                         </ul>
-                    </div>
-                    <div class="p-3">
-                        <img src="../assets/images/media/media-83.svg" alt="">
                     </div>
                 </div>
             </div>
@@ -98,59 +40,9 @@
                 <div class="card-body">
                     <h5 class="card-title mb-3">Upcoming Events</h5>
 
-                    <ul class="list-unstyled" id="eventList">
-                        <!-- Event Item 1 -->
-                        <li class="border rounded p-3 mb-3">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <div class="fw-semibold">Annual Townhall</div>
-                                    <div class="text-muted small">
-                                        Mar 20, 2025 — Jakarta Convention Center — PIC: CorpCom / HR
-                                    </div>
-                                    <div class="small mt-2">
-                                        Townhall Q1 — company update and awards. Status:
-                                        <span class="fw-semibold">Confirmed</span>
-                                    </div>
-                                </div>
-
-                                <div class="text-end ">
-                                    <div class="text-muted small">Holding</div>
-
-                                    <div class="mt-2">
-                                        <button class="btn btn-link btn-sm p-0 me-2">Edit</button>
-                                        <button class="btn btn-link text-danger btn-sm p-0">Delete</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-
-                        <!-- Event Item 2 -->
-                        <li class="border rounded p-3 mb-3">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <div class="fw-semibold">CSR Beach Cleanup</div>
-                                    <div class="text-muted small">
-                                        Apr 5, 2025 — Anyer Beach — PIC: Sustainability Team
-                                    </div>
-                                    <div class="small mt-2">
-                                        CSR activity with local community. Status:
-                                        <span class="fw-semibold">Planned</span>
-                                    </div>
-                                </div>
-
-                                <div class="text-end">
-                                    <div class="text-muted small">Subsidiary A</div>
-
-                                    <div class="mt-2">
-                                        <button class="btn btn-link btn-sm p-0 me-2">Edit</button>
-                                        <button class="btn btn-link text-danger btn-sm p-0">Delete</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
+                    <ul class="list-unstyled" id="eventList"></ul>
                     <div class="text-center mt-2">
-                        <a href="#" class="btn btn-link small">
+                        <a href="{{ route('events.upcoming') }}" class="btn btn-link small">
                             View All
                             <i class="bi bi-arrow-right ms-1"></i>
                         </a>
@@ -182,8 +74,7 @@
                             <div class="col-md-6 start-date-container">
                                 <label for="start_date" class="form-label">Start Date</label>
                                 <div class="input-group ">
-                                    <input name="start_date" type="text" class="form-control"
-                                        placeholder="Start Date" />
+                                    <input name="start_date" type="text" class="form-control" placeholder="Start Date" />
                                     <span class="input-group-text">WIB</span>
                                 </div>
                             </div>
@@ -191,8 +82,7 @@
                             <div class="col-md-6 end-date-container">
                                 <label for="end_date" class="form-label">End Date</label>
                                 <div class="input-group">
-                                    <input name="end_date" type="text" class="form-control"
-                                        placeholder="Start Date" />
+                                    <input name="end_date" type="text" class="form-control" placeholder="Start Date" />
                                     <span class="input-group-text">WIB</span>
                                 </div>
                             </div>

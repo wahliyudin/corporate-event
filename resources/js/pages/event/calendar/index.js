@@ -6,6 +6,7 @@ import "../../../tools/select2/select2.js";
 import { toastError, toastSuccess, toastWarning } from "../../../tools/toast/toast.js";
 import resetForm from "../../../tools/crud-manager/reset-form.js";
 import "./latest-activity.js";
+import "../../../tools/paginator/paginator.js";
 
 (function () {
     "use strict";
@@ -150,8 +151,27 @@ import "./latest-activity.js";
             url: `${origin}/events/categories/data-select`,
             type: 'GET',
             success: function (res) {
+                const maxShow = 6;
                 if (res.data.length > 0) {
-                    $('#event-categories').html(res.data.map(itemCategory).join(''));
+                    let eventCategories = '';
+                    const slicedData = res.data.slice(0, maxShow);
+                    if (res.data.length > maxShow) {
+                        const overflowData = res.data.slice(maxShow);
+                        eventCategories += slicedData.map(itemCategory).join('');
+                        let containerCollapse = `
+                            <div class="collapse" id="category-more">
+                        `
+                        containerCollapse += overflowData.map(itemCategory).join('');
+                        containerCollapse += `
+                        </div>
+                            <a class="ecommerce-more-link" data-bs-toggle="collapse" href="#category-more" role="button"
+                                aria-expanded="false" aria-controls="category-more">MORE</a>
+                        `;
+                        eventCategories += containerCollapse;
+                    } else {
+                        eventCategories = slicedData.map(itemCategory).join('');
+                    }
+                    $('#event-categories').html(eventCategories);
                 } else {
                     $('#event-categories').html(empty);
                 }
@@ -357,6 +377,7 @@ import "./latest-activity.js";
 
     $(document).on('reload-all-api', function () {
         calendar.refetchEvents();
+        $('#eventList').laravelPaginator("refresh");
     });
 
     function setDetailEvent(event) {
@@ -501,4 +522,111 @@ import "./latest-activity.js";
     // for activity scroll
     var myElement1 = document.getElementById('full-calendar-activity');
     new SimpleBar(myElement1, { autoHide: true });
+
+    $('#eventList').laravelPaginator({
+        url: `${origin}/events/upcoming/data`,
+        perPage: 2,
+        pagination: false,
+        renderData: function (data, container) {
+            let html = '';
+            data.forEach(item => {
+                const MAX_LENGTH = 200;
+                const description = item.description;
+                const shortText = description.length > MAX_LENGTH ? description.substring(0, MAX_LENGTH) + '...' : description;
+                const isLong = description.length > MAX_LENGTH;
+                let descFull = '';
+                if (isLong) {
+                    descFull = `<span class="desc-full d-none">${description}</span>
+                    <a href="#" class="toggle-more text-primary ms-1">More</a>`;
+                }
+                html += `
+                <li class="border rounded p-3 mb-3">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <div class="fw-semibold fs-14">${limitString(item.title, 50)}</div>
+
+                                <div class="small mt-1 d-flex flex-wrap align-items-center gap-2">
+                                    <span class="badge rounded-pill bg-light text-dark border">
+                                        <i class="fe fe-calendar me-1"></i> ${item.date}
+                                    </span>
+
+                                    <span class="badge rounded-pill bg-light text-dark border">
+                                        <i class="fe fe-map-pin me-1"></i> ${limitString(item.location, 40)}
+                                    </span>
+
+                                    <span class="badge rounded-pill bg-primary text-white">
+                                        <i class="fe fe-user me-1"></i> PIC: ${item.pic}
+                                    </span>
+                                </div>
+
+                                <div class="small mt-2">
+                                    <span class="desc-short">${shortText}</span>
+                                    ${descFull}
+                                </div>
+                            </div>
+
+                            <div class="text-end">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge bg-light text-primary"></span>
+                                    <span class="badge" style="background-color: ${item.category_color};">
+                                        ${item.category}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="btn-list float-end">
+                            <a href="" class="text-primary fw-semibold d-inline-flex">
+                                Complete Now <i class="fe fe-arrow-right transform-arrow ms-2 lh-base"></i>
+                            </a>
+                        </div>
+                    </li>
+            `;
+            });
+
+            container.html(html);
+        },
+    });
+
+    function limitString(str, limit) {
+        if (str.length > limit) {
+            return str.substring(0, limit) + '...';
+        } else {
+            return str;
+        }
+    }
+    let expandedRow = null;
+
+    $(document).on('click', '.toggle-more', function (e) {
+        e.preventDefault();
+
+        const $link = $(this);
+        const $wrapper = $link.closest('div');
+        const $short = $wrapper.find('.desc-short');
+        const $full = $wrapper.find('.desc-full');
+
+        if (expandedRow && expandedRow[0] !== $wrapper[0]) {
+            const $prevLink = expandedRow.find('.toggle-more');
+            const $prevShort = expandedRow.find('.desc-short');
+            const $prevFull = expandedRow.find('.desc-full');
+
+            $prevFull.addClass('d-none');
+            $prevShort.removeClass('d-none');
+            $prevLink.text('More');
+        }
+
+        const isExpanded = !$full.hasClass('d-none');
+
+        if (isExpanded) {
+            $full.addClass('d-none');
+            $short.removeClass('d-none');
+            $link.text('More');
+            expandedRow = null;
+        } else {
+            $short.addClass('d-none');
+            $full.removeClass('d-none');
+            $link.text('Less');
+            expandedRow = $wrapper;
+        }
+    });
 })();

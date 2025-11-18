@@ -5,7 +5,6 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
-                'resources/sass/app.scss',
                 'resources/js/app.js',
 
                 'resources/css/custom.css',
@@ -26,6 +25,8 @@ export default defineConfig({
                 'resources/js/pages/event/event/index.js',
 
                 'resources/js/pages/event/calendar/index.js',
+
+                'resources/js/pages/event/upcoming/index.js',
 
                 'resources/js/pages/approval/user/index.js',
                 'resources/js/pages/approval/event/index.js',

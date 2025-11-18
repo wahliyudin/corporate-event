@@ -6,6 +6,7 @@ use App\Http\Controllers\Event\CalendarController;
 use App\Http\Controllers\Event\EventCategoryController;
 use App\Http\Controllers\Event\EventController;
 use App\Http\Controllers\Approval\EventController as ApprovalEventController;
+use App\Http\Controllers\Event\UpcomingEventController;
 use App\Http\Controllers\Setting\PermissionController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,9 @@ Route::middleware('auth')->group(function () {
     Route::get('events/{id}/edit', [EventController::class, 'edit'])->name('events.edit');
     Route::delete('events/{id}/destroy', [EventController::class, 'destroy'])->name('events.destroy');
     Route::get('events/latest-activity', [EventController::class, 'latestActivity'])->name('events.latest-activity');
+
+    Route::get('events/upcoming', [UpcomingEventController::class, 'index'])->name('events.upcoming');
+    Route::get('events/upcoming/data', [UpcomingEventController::class, 'getEvents'])->name('events.upcoming.data');
 
     Route::get('calendar', [CalendarController::class, 'index'])->name('calendar.index')->middleware('permission:calendar_read');
     Route::get('calendar/data-calendar', [CalendarController::class, 'dataCalendar'])->name('calendar.data-calendar');

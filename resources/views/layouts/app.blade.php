@@ -53,15 +53,6 @@
     <script src="{{ asset('assets/js/simplebar.js') }}"></script>
     <script src="{{ asset('assets/libs/@simonwep/pickr/pickr.es5.min.js') }}"></script>
     <script src="{{ asset('assets/js/custom.js') }}"></script>
-    {{-- <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const toggleBtn = document.querySelector(".sidemenu-toggle");
-
-            if (window.innerWidth <= 768 && toggleBtn) {
-                toggleBtn.click();
-            }
-        });
-    </script> --}}
     @stack('js')
 </body>
 
