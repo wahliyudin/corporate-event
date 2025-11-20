@@ -16,7 +16,7 @@ class StoreRequest extends FormRequest
         $rules = [
             'id' => 'nullable',
             'name' => 'required',
-            'color' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+            'color' => ['required', 'regex:/^#(?:[0-9a-fA-F]{3}){1,2}(?:[0-9a-fA-F]{2})?$/'],
         ];
 
         return $rules;
